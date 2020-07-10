@@ -9,8 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 # init mimetypes manually if needed
-if not mimetypes.inited:
-    mimetypes.init()
+mimetypes.init()
 
 
 def list_directory(path):
