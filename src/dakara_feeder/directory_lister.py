@@ -8,6 +8,11 @@ from dakara_feeder.subtitle_parser import is_subtitle
 logger = logging.getLogger(__name__)
 
 
+# init mimetypes manually if needed
+if not mimetypes.inited:
+    mimetypes.init()
+
+
 def list_directory(path):
     """List video files in given directory recursively
 
