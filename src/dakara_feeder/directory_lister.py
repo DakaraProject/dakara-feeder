@@ -51,7 +51,7 @@ def group_by_type(files):
     for file in files:
         # estimate MIME type of file using standard extensions
         mimetype, _ = mimetypes.guess_type(file)
-        print(file, mimetype)
+        print("Call of groupe_by_type", file, mimetype)
         maintype = None
         subtype = None
         if mimetype:
