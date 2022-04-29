@@ -101,7 +101,6 @@ for:
       - "python -m pip install -e \".[tests]\""
 
       # check version of dependencies if requested
-      - "if $INTEGRATION_TEST; then ffprobe -version; fi"
       - "if $INTEGRATION_TEST; then mediainfo --version; fi"
 
     test_script:
