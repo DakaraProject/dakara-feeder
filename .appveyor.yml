@@ -93,7 +93,6 @@ for:
     install:
       # install system dependencies if requested
       - "if $INTEGRATION_TEST; then brew install --cask mediainfo; fi"
-      - "if $INTEGRATION_TEST; then brew install ffmpeg; fi"
 
       # the features used in setup.cfg require a recent enough version of setuptools
       - "python -m pip install --upgrade \"setuptools>=46.4.0\""
