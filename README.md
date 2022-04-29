@@ -21,11 +21,11 @@ Other important parts of the project include:
 
 ### System requirements
 
-* Python3, to make everything up and running (supported versions: 3.7, 3.8 and 3.9);
+* Python3, to make everything up and running (supported versions: 3.7, 3.8, 3.9 and 3.10);
 * [ffmpeg](https://www.ffmpeg.org/), to extract lyrics and extract metadata from files (preferred way);
 * [MediaInfo](https://mediaarea.net/fr/MediaInfo/), to extract metadata from files (slower, alternative way, may not work on Windows).
 
-Linux and Windows are supported.
+Linux, Mac and Windows are supported.
 
 ### Virtual environment
 
