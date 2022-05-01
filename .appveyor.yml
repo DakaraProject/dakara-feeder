@@ -100,8 +100,8 @@ for:
       # install dependencies for test
       - "python -m pip install -e \".[tests]\""
 
-      # check version of dependencies if requested
-      - "if $INTEGRATION_TEST; then mediainfo --version; fi"
+      # # check version of dependencies if requested
+      # - "if $INTEGRATION_TEST; then mediainfo --version; fi"
 
     test_script:
       # run tests
