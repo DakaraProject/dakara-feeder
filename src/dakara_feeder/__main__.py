@@ -293,6 +293,7 @@ def main():
         logger=logger,
         debug=args.debug,
     ) as exit_value:
+        print("test version")
         args.function(args)
 
     sys.exit(exit_value.value)
