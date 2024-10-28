@@ -17,7 +17,7 @@ class TXTSubtitleParserTestCase(TestCase):
     def test_parse(self):
         """Parse text file."""
         with path("tests.resources.subtitles", "plain.txt") as file:
-            parser = TXTSubtitleParser.parse(Path(file))
+            parser = TXTSubtitleParser.parse(file)
             self.assertEqual(parser.get_lyrics(), file.read_text())
 
     def test_parse_string(self):
@@ -39,13 +39,13 @@ class Pysubs2SubtitleParserTestCase(TestCase):
         """
         # open and parse given file
         with path("tests.resources.subtitles", file_name) as file:
-            parser = Pysubs2SubtitleParser.parse(Path(file))
+            parser = Pysubs2SubtitleParser.parse(file)
             lyrics = parser.get_lyrics()
             lines = lyrics.splitlines()
 
         # open expected result
         with path("tests.resources.subtitles", file_name + "_expected") as file:
-            expected_lines = Path(file).read_text().splitlines()
+            expected_lines = file.read_text().splitlines()
 
         # check against expected file
         self.assertListEqual(lines, expected_lines)
@@ -65,7 +65,7 @@ class Pysubs2SubtitleParserTestCase(TestCase):
 
         # open expected result
         with path("tests.resources.subtitles", "simple.ass_expected") as file:
-            expected_lines = Path(file).read_text().splitlines()
+            expected_lines = file.read_text().splitlines()
 
         # check against expected file
         self.assertListEqual(lines, expected_lines)

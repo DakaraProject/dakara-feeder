@@ -189,38 +189,38 @@ class GetMainTypeTestCase(TestCase):
     def test_video(self):
         """Test the common video files."""
         with path("tests.resources.filetype", "file.avi") as file:
-            self.assertEqual(get_main_type(Path(file)), "video")
+            self.assertEqual(get_main_type(file), "video")
 
         with path("tests.resources.filetype", "file.mkv") as file:
-            self.assertEqual(get_main_type(Path(file)), "video")
+            self.assertEqual(get_main_type(file), "video")
 
         with path("tests.resources.filetype", "file_upper.MKV") as file:
-            self.assertEqual(get_main_type(Path(file)), "video")
+            self.assertEqual(get_main_type(file), "video")
 
         with path("tests.resources.filetype", "file.mp4") as file:
-            self.assertEqual(get_main_type(Path(file)), "video")
+            self.assertEqual(get_main_type(file), "video")
 
     def test_audio(self):
         """Test the common audio files."""
         with path("tests.resources.filetype", "file.flac") as file:
-            self.assertEqual(get_main_type(Path(file)), "audio")
+            self.assertEqual(get_main_type(file), "audio")
 
         with path("tests.resources.filetype", "file.mp3") as file:
-            self.assertEqual(get_main_type(Path(file)), "audio")
+            self.assertEqual(get_main_type(file), "audio")
 
         with path("tests.resources.filetype", "file.ogg") as file:
-            self.assertEqual(get_main_type(Path(file)), "audio")
+            self.assertEqual(get_main_type(file), "audio")
 
     def test_subtitle(self):
         """Test the common subtitles files."""
         with path("tests.resources.filetype", "file.ass") as file:
-            self.assertIsNone(get_main_type(Path(file)))
+            self.assertIsNone(get_main_type(file))
 
         with path("tests.resources.filetype", "file.ssa") as file:
-            self.assertIsNone(get_main_type(Path(file)))
+            self.assertIsNone(get_main_type(file))
 
         with path("tests.resources.filetype", "file.srt") as file:
-            self.assertIsNone(get_main_type(Path(file)))
+            self.assertIsNone(get_main_type(file))
 
 
 @patch("dakara_feeder.directory.get_main_type", autoset=True)

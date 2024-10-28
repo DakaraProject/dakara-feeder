@@ -12,7 +12,7 @@ class FFmpegSubtitleExtractorTestCase(TestCase):
     def test_extract(self):
         """Test to extract subtitle from file."""
         with path("tests.resources.media", "dummy.mkv") as file:
-            extractor = FFmpegSubtitleExtractor.extract(Path(file))
+            extractor = FFmpegSubtitleExtractor.extract(file)
             subtitle = extractor.get_subtitle()
 
         with path("tests.resources.subtitles", "dummy.ass") as file:
@@ -22,8 +22,7 @@ class FFmpegSubtitleExtractorTestCase(TestCase):
 
     def test_extract_error(self):
         """Test error when extracting subtitle from file."""
-        file_path = Path("nowhere")
-        extractor = FFmpegSubtitleExtractor.extract(file_path)
+        extractor = FFmpegSubtitleExtractor.extract(Path("nowhere"))
         subtitle = extractor.get_subtitle()
 
         self.assertEqual(subtitle, "")
