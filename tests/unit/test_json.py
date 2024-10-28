@@ -1,5 +1,6 @@
 from json import dumps
 from pathlib import Path
+from re import escape
 from unittest import TestCase
 from unittest.mock import patch
 
@@ -38,7 +39,7 @@ class GetJsonFileContentTestCase(TestCase):
         # call the method
         with self.assertRaisesRegex(
             JsonFileNotFoundError,
-            f"Unable to find JSON file '{Path('path/to/file')}'",
+            escape(f"Unable to find JSON file '{Path('path/to/file')}'"),
         ):
             get_json_file_content(Path("path/to/file"))
 
@@ -51,7 +52,7 @@ class GetJsonFileContentTestCase(TestCase):
         # call the method
         with self.assertRaisesRegex(
             JsonFileInvalidError,
-            f"Unable to parse JSON file '{Path('path/to/file')}':",
+            escape(f"Unable to parse JSON file '{Path('path/to/file')}':"),
         ):
             get_json_file_content(Path("path/to/file"))
 
@@ -79,6 +80,6 @@ class GetJsonFileContentTestCase(TestCase):
         # call the method
         with self.assertRaisesRegex(
             JsonContentInvalidError,
-            f"Unable to find key 'other' in JSON file '{Path('path/to/file')}'",
+            escape(f"Unable to find key 'other' in JSON file '{Path('path/to/file')}'"),
         ):
             get_json_file_content(Path("path/to/file"), "other")

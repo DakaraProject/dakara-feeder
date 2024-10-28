@@ -1,4 +1,5 @@
 from pathlib import Path
+from re import escape
 from unittest import TestCase
 from unittest.mock import patch
 
@@ -38,7 +39,8 @@ class GetYamlFileContentTestCase(TestCase):
 
         # call the method
         with self.assertRaisesRegex(
-            YamlFileNotFoundError, f"Unable to find YAML file '{Path('path/to/file')}'"
+            YamlFileNotFoundError,
+            escape(f"Unable to find YAML file '{Path('path/to/file')}'"),
         ):
             get_yaml_file_content(Path("path/to/file"))
 
@@ -53,7 +55,9 @@ class GetYamlFileContentTestCase(TestCase):
         # call the method
         with self.assertRaisesRegex(
             YamlFileInvalidError,
-            f"Unable to parse YAML file '{Path('path/to/file')}': error message",
+            escape(
+                f"Unable to parse YAML file '{Path('path/to/file')}': error message"
+            ),
         ):
             get_yaml_file_content(Path("path/to/file"))
 
@@ -81,6 +85,6 @@ class GetYamlFileContentTestCase(TestCase):
         # call the method
         with self.assertRaisesRegex(
             YamlContentInvalidError,
-            f"Unable to find key 'other' in YAML file '{Path('path/to/file')}'",
+            escape(f"Unable to find key 'other' in YAML file '{Path('path/to/file')}'"),
         ):
             get_yaml_file_content(Path("path/to/file"), "other")
