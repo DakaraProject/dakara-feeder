@@ -11,7 +11,6 @@ from dakara_feeder.__main__ import (
     feed_tags,
     feed_work_types,
     feed_works,
-    logger,
     main,
 )
 
@@ -25,13 +24,19 @@ class CreateConfigTestCase(TestCase):
     def test_create_config(self, mocked_create_config_file, mocked_create_logger):
         """Test a normall config creation."""
         # call the function
-        with self.assertLogs("dakara_feeder.__main__") as logger:
-            create_config(Namespace(force=False))
+        with patch.multiple(
+            "dakara_feeder.__main__", __version__="0.0.0", __date__="1970-01-01"
+        ):
+            with self.assertLogs("dakara_feeder.__main__") as logger:
+                create_config(Namespace(force=False))
 
         # assert the logs
         self.assertListEqual(
             logger.output,
-            ["INFO:dakara_feeder.__main__:Please edit this file"],
+            [
+                "INFO:dakara_feeder.__main__:Dakara feeder 0.0.0 (1970-01-01)",
+                "INFO:dakara_feeder.__main__:Please edit this file",
+            ],
         )
 
         # assert the call
@@ -202,24 +207,19 @@ class FeedWorkTypesTestCase(TestCase):
 
 
 @patch("dakara_feeder.__main__.sys.exit")
-@patch("dakara_feeder.__main__.check_version", autoset=True)
 @patch.object(ArgumentParser, "parse_args")
 class MainTestCase(TestCase):
     """Test the main action."""
 
-    def test_normal_exit(self, mocked_parse_args, mocked_check_version, mocked_exit):
+    def test_normal_exit(self, mocked_parse_args, mocked_exit):
         """Test a normal exit."""
         # create mocks
         function = MagicMock()
         mocked_parse_args.return_value = Namespace(function=function, debug=False)
 
         # call the function
-        with patch.multiple(
-            "dakara_feeder.__main__", __version__="0.0.0", __date__="1970-01-01"
-        ):
-            main()
+        main()
 
         # assert the call
         function.assert_called_with(ANY)
-        mocked_check_version.assert_called_with("feeder", "0.0.0", "1970-01-01", logger)
         mocked_exit.assert_called_with(0)
