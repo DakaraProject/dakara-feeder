@@ -188,21 +188,19 @@ class SplitPathObjectTestCase(TestCase):
     def test_split_path_and_module(self):
         self.assertTupleEqual(
             customization.split_path_object(
-                str(Path("path") / "to" / "file.py") + "::object.CustomSong"
+                str(Path("path/to/file.py")) + "::object.CustomSong"
             ),
-            (Path("path") / "to" / "file.py", "object.CustomSong"),
+            (Path("path/to/file.py"), "object.CustomSong"),
         )
 
     def test_split_path(self):
         self.assertTupleEqual(
-            customization.split_path_object(str(Path("path") / "to" / "file.py")),
-            (Path("path") / "to" / "file.py", None),
+            customization.split_path_object(str(Path("path/to/file.py"))),
+            (Path("path/to/file.py"), None),
         )
         self.assertTupleEqual(
-            customization.split_path_object(
-                str(Path("path") / "to" / "file.py") + "::"
-            ),
-            (Path("path") / "to" / "file.py", None),
+            customization.split_path_object(str(Path("path/to/file.py")) + "::"),
+            (Path("path/to/file.py"), None),
         )
 
     def test_split_module(self):
@@ -226,10 +224,10 @@ class DirInPathTestCase(TestCase):
         mocked_sys.path = ["some/directory"]
 
         # use the context manager
-        with customization.dir_in_path(Path("path") / "to" / "directory"):
+        with customization.dir_in_path(Path("path/to/directory")):
             self.assertListEqual(
                 mocked_sys.path,
-                [str(Path("path") / "to" / "directory"), "some/directory"],
+                [str(Path("path/to/directory")), "some/directory"],
             )
 
         # assert the mock
@@ -242,11 +240,11 @@ class DirInPathTestCase(TestCase):
         mocked_sys.path = []
 
         # use the context manager
-        with customization.dir_in_path(Path("path") / "to" / "directory"):
+        with customization.dir_in_path(Path("path/to/directory")):
             mocked_sys.path.append("other/directory")
             self.assertListEqual(
                 mocked_sys.path,
-                [str(Path("path") / "to" / "directory"), "other/directory"],
+                [str(Path("path/to/directory")), "other/directory"],
             )
 
         # assert the mock
@@ -265,11 +263,9 @@ class ImportFromFileTestCase(TestCase):
         """Test to import a non existing file."""
         with self.assertRaisesRegex(
             customization.InvalidObjectModuleNameError,
-            re.escape(
-                f'No module found from file {Path("path") / "to" / "nowhere.py"}'
-            ),
+            re.escape(f'No module found from file {Path("path/to/nowhere.py")}'),
         ):
-            customization.import_from_file(Path("path") / "to" / "nowhere.py")
+            customization.import_from_file(Path("path/to/nowhere.py"))
 
 
 class ImportFromModuleTestCase(TestCase):

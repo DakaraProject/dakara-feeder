@@ -129,16 +129,16 @@ class SongsFeederTestCase(TestCase):
         """Test to feed."""
         # create the mocks
         mocked_http_client_class.return_value.retrieve_songs.return_value = [
-            {"id": 0, "path": Path("directory_0") / "song_0.mp4"},
-            {"id": 1, "path": Path("directory_1") / "music_1.mp4"},
+            {"id": 0, "path": Path("directory_0/song_0.mp4")},
+            {"id": 1, "path": Path("directory_1/music_1.mp4")},
         ]
         mocked_http_client_class.return_value.prune_artists.return_value = 2
         mocked_http_client_class.return_value.prune_works.return_value = 1
         mocked_list_directory.return_value = [
-            SongPaths(Path("directory_0") / "song_0.mp4"),
+            SongPaths(Path("directory_0/song_0.mp4")),
             SongPaths(
-                Path("directory_2") / "song_2.mp4",
-                subtitle=Path("directory_2") / "song_2.ass",
+                Path("directory_2/song_2.mp4"),
+                subtitle=Path("directory_2/song_2.ass"),
             ),
         ]
         mocked_metadata_parse.return_value.get_duration.return_value = timedelta(
@@ -180,7 +180,7 @@ class SongsFeederTestCase(TestCase):
         mocked_http_client_class.return_value.prune_artists.assert_called_with()
         mocked_http_client_class.return_value.prune_works.assert_called_with()
         mocked_subtitle_parse.assert_called_with(
-            Path("basepath") / "directory_2" / "song_2.ass"
+            Path("basepath/directory_2/song_2.ass")
         )
         mocked_subtitle_parse.return_value.get_lyrics.assert_called_with()
 
@@ -215,8 +215,8 @@ class SongsFeederTestCase(TestCase):
         """Test feed when a file has been renamed."""
         # mock content of server (old files)
         mocked_http_client_class.return_value.retrieve_songs.return_value = [
-            {"id": 0, "path": Path("directory_0") / "song.mp4"},
-            {"id": 1, "path": Path("directory_1") / "music.mp4"},
+            {"id": 0, "path": Path("directory_0/song.mp4")},
+            {"id": 1, "path": Path("directory_1/music.mp4")},
         ]
         mocked_http_client_class.return_value.prune_artists.return_value = 0
         mocked_http_client_class.return_value.prune_works.return_value = 0
@@ -224,8 +224,8 @@ class SongsFeederTestCase(TestCase):
         # mock content of file system (new files)
         # Simulate file music.mp4 renamed to musics.mp4
         mocked_list_directory.return_value = [
-            SongPaths(Path("directory_0") / "song.mp4"),
-            SongPaths(Path("directory_1") / "musics.mp4"),
+            SongPaths(Path("directory_0/song.mp4")),
+            SongPaths(Path("directory_1/musics.mp4")),
         ]
         mocked_metadata_parse.return_value.get_duration.return_value = timedelta(
             seconds=1
@@ -358,11 +358,9 @@ class SongsFeederTestCase(TestCase):
         """Test to feed without prune artists and works without songs."""
         # create the mocks
         mocked_http_client_class.return_value.retrieve_songs.return_value = [
-            {"id": 0, "path": Path("directory_0") / "song_0.mp4"}
+            {"id": 0, "path": Path("directory_0/song_0.mp4")}
         ]
-        mocked_list_directory.return_value = [
-            SongPaths(Path("directory_0") / "song_0.mp4")
-        ]
+        mocked_list_directory.return_value = [SongPaths(Path("directory_0/song_0.mp4"))]
         mocked_metadata_parse.return_value.get_duration.return_value = timedelta(
             seconds=1
         )
@@ -411,8 +409,8 @@ class SongsFeederTestCase(TestCase):
         mocked_http_client_class.return_value.prune_artists.return_value = 0
         mocked_http_client_class.return_value.prune_works.return_value = 0
         mocked_list_directory.return_value = [
-            SongPaths(Path("directory_0") / "song_0.mp4"),
-            SongPaths(Path("directory_1") / "song_1.mp4"),
+            SongPaths(Path("directory_0/song_0.mp4")),
+            SongPaths(Path("directory_1/song_1.mp4")),
         ]
         mocked_metadata_parse.return_value.get_duration.return_value = timedelta(
             seconds=1
@@ -503,9 +501,7 @@ class SongsFeederTestCase(TestCase):
         mocked_http_client_class.return_value.retrieve_songs.return_value = []
         mocked_http_client_class.return_value.prune_artists.return_value = 0
         mocked_http_client_class.return_value.prune_works.return_value = 0
-        mocked_list_directory.return_value = [
-            SongPaths(Path("directory_0") / "song_0.mp4")
-        ]
+        mocked_list_directory.return_value = [SongPaths(Path("directory_0/song_0.mp4"))]
         mocked_metadata_parse.return_value.get_duration.return_value = timedelta(
             seconds=1
         )

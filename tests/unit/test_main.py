@@ -106,7 +106,7 @@ class FeedWorksTestCase(TestCase):
         feed_works(
             Namespace(
                 debug=False,
-                file=Path("path") / "to" / "file",
+                file=Path("path/to/file"),
                 progress=True,
                 update_only=False,
             )
@@ -120,7 +120,7 @@ class FeedWorksTestCase(TestCase):
         mocked_set_loglevel.assert_called_with(ANY)
         mocked_works_feeder_class.assert_called_with(
             ANY,
-            works_file_path=Path("path") / "to" / "file",
+            works_file_path=Path("path/to/file"),
             progress=True,
             update_only=False,
         )
@@ -148,9 +148,7 @@ class FeedTagsTestCase(TestCase):
     ):
         """Test to feed tags."""
         # call the function
-        feed_tags(
-            Namespace(debug=False, file=Path("path") / "to" / "file", progress=True)
-        )
+        feed_tags(Namespace(debug=False, file=Path("path/to/file"), progress=True))
 
         # assert the call
         mocked_create_logger.assert_called_with(wrap=True)
@@ -159,7 +157,7 @@ class FeedTagsTestCase(TestCase):
         mocked_set_debug.assert_called_with(False)
         mocked_set_loglevel.assert_called_with(ANY)
         mocked_tags_feeder_class.assert_called_with(
-            ANY, tags_file_path=Path("path") / "to" / "file", progress=True
+            ANY, tags_file_path=Path("path/to/file"), progress=True
         )
         mocked_tags_feeder_class.return_value.load.assert_called_with()
         mocked_tags_feeder_class.return_value.feed.assert_called_with()
@@ -188,7 +186,7 @@ class FeedWorkTypesTestCase(TestCase):
         feed_work_types(
             Namespace(
                 debug=False,
-                file=Path("path") / "to" / "file",
+                file=Path("path/to/file"),
                 progress=True,
             )
         )
@@ -200,7 +198,7 @@ class FeedWorkTypesTestCase(TestCase):
         mocked_set_debug.assert_called_with(False)
         mocked_set_loglevel.assert_called_with(ANY)
         mocked_work_types_feeder_class.assert_called_with(
-            ANY, work_types_file_path=Path("path") / "to" / "file", progress=True
+            ANY, work_types_file_path=Path("path/to/file"), progress=True
         )
         mocked_work_types_feeder_class.return_value.load.assert_called_with()
         mocked_work_types_feeder_class.return_value.feed.assert_called_with()

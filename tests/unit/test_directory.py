@@ -52,10 +52,10 @@ class ListDirectoryTestCase(TestCase):
                     audio=Path("file1.ogg"),
                     subtitle=Path("file1.ass"),
                 ),
-                SongPaths(Path("subdirectory") / "file2.mkv"),
+                SongPaths(Path("subdirectory/file2.mkv")),
                 SongPaths(
-                    Path("subdirectory") / "file3.mkv",
-                    subtitle=Path("subdirectory") / "file3.ass",
+                    Path("subdirectory/file3.mkv"),
+                    subtitle=Path("subdirectory/file3.ass"),
                 ),
             ],
             listing,
@@ -101,8 +101,8 @@ class ListDirectoryTestCase(TestCase):
             [
                 SongPaths(Path("file0.mkv"), subtitle=Path("file0.ass")),
                 SongPaths(
-                    Path("subdirectory") / "file0.mkv",
-                    subtitle=Path("subdirectory") / "file0.ass",
+                    Path("subdirectory/file0.mkv"),
+                    subtitle=Path("subdirectory/file0.ass"),
                 ),
             ],
             listing,
