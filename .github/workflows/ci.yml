@@ -38,10 +38,10 @@ jobs:
       - name: Run tests
         run: python -m pytest -v --cov src tests/unit
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}-${{ matrix.python-version }}-unit-tests-coverage
+          path: ./coverage.xml
 
   integration-tests:
     runs-on: ${{ matrix.os }}
@@ -82,10 +82,10 @@ jobs:
       - name: Run tests
         run: python -m pytest -v --cov src tests/integration
 
-      - name: Upload coverage reports to Codecov
-        uses: codecov/codecov-action@v4
-        env:
-          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.os }}-integration-tests-coverage
+          path: ./coverage.xml
 
   static-tests:
     runs-on: ubuntu-latest
@@ -109,3 +109,20 @@ jobs:
 
       - name: Run ruff linter
         run: python -m ruff check .
+
+  upload-codecov-reports:
+    needs:
+      - unit-tests
+      - integration-tests
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+      - name: Upload to Codecov
+        uses: codecov/codecov-action@v4
+        env:
+          CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
