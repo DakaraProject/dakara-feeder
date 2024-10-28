@@ -1,8 +1,7 @@
 from datetime import timedelta
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
-
-from path import Path
 
 from dakara_feeder.directory import SongPaths
 from dakara_feeder.feeder.songs import KaraFolderNotFound, SongsFeeder
@@ -88,13 +87,13 @@ class SongsFeederTestCase(TestCase):
         # assert the call
         mocked_get_custom_song.assert_called_with("module.MySong")
 
-    @patch.object(Path, "isdir", autoset=True)
+    @patch.object(Path, "is_dir", autoset=True)
     def test_check_kara_folder_path_exists(
-        self, mocked_isdir, mocked_http_client_class
+        self, mocked_is_dir, mocked_http_client_class
     ):
         """Test to check when the kara folder exists."""
         # setup the mock
-        mocked_isdir.return_value = True
+        mocked_is_dir.return_value = True
 
         # create the object
         feeder = SongsFeeder(self.config)
@@ -103,15 +102,15 @@ class SongsFeederTestCase(TestCase):
         feeder.check_kara_folder_path()
 
         # assert the call
-        mocked_isdir.assert_called_with()
+        mocked_is_dir.assert_called_with()
 
-    @patch.object(Path, "isdir", autoset=True)
+    @patch.object(Path, "is_dir", autoset=True)
     def test_check_kara_folder_path_not_exists(
-        self, mocked_isdir, mocked_http_client_class
+        self, mocked_is_dir, mocked_http_client_class
     ):
         """Test to check when the kara folder does not exists."""
         # setup the mock
-        mocked_isdir.return_value = False
+        mocked_is_dir.return_value = False
 
         # create the object
         feeder = SongsFeeder(self.config)
@@ -163,7 +162,7 @@ class SongsFeederTestCase(TestCase):
 
         # assert the mocked calls
         mocked_http_client_class.return_value.retrieve_songs.assert_called_with()
-        mocked_list_directory.assert_called_with("basepath")
+        mocked_list_directory.assert_called_with(Path("basepath"))
         mocked_http_client_class.return_value.post_song.assert_called_with(
             [
                 {
@@ -248,7 +247,7 @@ class SongsFeederTestCase(TestCase):
 
         # assert the mocked calls
         mocked_http_client_class.return_value.retrieve_songs.assert_called_with()
-        mocked_list_directory.assert_called_with("basepath")
+        mocked_list_directory.assert_called_with(Path("basepath"))
         mocked_http_client_class.return_value.put_song.assert_called_with(
             1,
             {
@@ -317,7 +316,7 @@ class SongsFeederTestCase(TestCase):
 
         # assert the mocked calls
         mocked_http_client_class.return_value.retrieve_songs.assert_called_with()
-        mocked_list_directory.assert_called_with("basepath")
+        mocked_list_directory.assert_called_with(Path("basepath"))
         mocked_http_client_class.return_value.put_song.assert_called_with(
             1,
             {
@@ -383,7 +382,7 @@ class SongsFeederTestCase(TestCase):
 
         # assert the mocked calls
         mocked_http_client_class.return_value.retrieve_songs.assert_called_with()
-        mocked_list_directory.assert_called_with("basepath")
+        mocked_list_directory.assert_called_with(Path("basepath"))
         mocked_http_client_class.return_value.post_song.assert_not_called()
         mocked_http_client_class.return_value.delete_song.assert_not_called()
         mocked_http_client_class.return_value.prune_artists.assert_not_called()
@@ -435,7 +434,7 @@ class SongsFeederTestCase(TestCase):
 
         # assert the mocked calls
         mocked_http_client_class.return_value.retrieve_songs.assert_called_with()
-        mocked_list_directory.assert_called_with("basepath")
+        mocked_list_directory.assert_called_with(Path("basepath"))
         songs = [
             {
                 "title": "song_0",
@@ -596,7 +595,7 @@ class SongsFeederTestCase(TestCase):
 
         # assert the mocked calls
         mocked_http_client_class.return_value.retrieve_songs.assert_called_with()
-        mocked_list_directory.assert_called_with("basepath")
+        mocked_list_directory.assert_called_with(Path("basepath"))
         mocked_http_client_class.return_value.post_song.assert_called_with(
             [
                 {

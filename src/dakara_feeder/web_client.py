@@ -1,9 +1,9 @@
 """HTTP client for the Dakara server."""
 
 import logging
+from pathlib import Path
 
 from dakara_base.http_client import HTTPClient, ResponseInvalidError
-from path import Path
 
 logger = logging.getLogger(__name__)
 
@@ -15,7 +15,7 @@ class HTTPClientDakara(HTTPClient):
         """Retreive the songs of the library containing their path.
 
         Returns:
-            list: List of path on the songs.
+            list of dict: List of path on the songs.
         """
         endpoint = "library/songs/retrieve/"
         songs = self.get(endpoint)

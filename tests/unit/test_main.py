@@ -1,9 +1,9 @@
 from argparse import ArgumentParser, Namespace
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import ANY, MagicMock, patch
 
 from dakara_base.config import Config
-from path import Path
 
 from dakara_feeder.__main__ import (
     create_config,

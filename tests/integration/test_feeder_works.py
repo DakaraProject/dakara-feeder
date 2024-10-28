@@ -1,13 +1,7 @@
+from importlib.resources import path
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import call, patch
-
-try:
-    from importlib.resources import path
-
-except ImportError:
-    from importlib_resources import path
-
-from path import Path
 
 from dakara_feeder.feeder.works import WorksFeeder
 

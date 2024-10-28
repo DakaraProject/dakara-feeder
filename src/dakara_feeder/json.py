@@ -9,7 +9,7 @@ def get_json_file_content(file_path, key=None):
     """Load content of the given JSON file.
 
     Args:
-        file_path (path.Path): Path to the JSON file.
+        file_path (pathlib.Path): Path to the JSON file.
         key (str): If given, only this key of the JSON file will be returned.
             If the key does not exist, raise an `JsonContentInvalidError`
             error.

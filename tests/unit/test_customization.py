@@ -1,11 +1,10 @@
 import inspect
 import re
 from importlib import resources
+from pathlib import Path
 from types import ModuleType
 from unittest import TestCase
 from unittest.mock import patch
-
-from path import Path
 
 from dakara_feeder import customization
 from dakara_feeder.song import BaseSong
@@ -267,7 +266,7 @@ class ImportFromFileTestCase(TestCase):
         with self.assertRaisesRegex(
             customization.InvalidObjectModuleNameError,
             re.escape(
-                "No module found from file " + Path("path") / "to" / "nowhere.py"
+                f'No module found from file {Path("path") / "to" / "nowhere.py"}'
             ),
         ):
             customization.import_from_file(Path("path") / "to" / "nowhere.py")

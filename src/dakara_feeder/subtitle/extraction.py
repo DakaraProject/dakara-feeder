@@ -3,9 +3,10 @@
 import logging
 import subprocess
 from abc import ABC, abstractmethod
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from dakara_base.exceptions import DakaraError
-from path import TempDir
 
 logger = logging.getLogger(__name__)
 
@@ -80,8 +81,8 @@ class FFmpegSubtitleExtractor(SubtitleExtractor):
         if not cls.is_available():
             raise FFmpegNotInstalledError("FFmpeg not installed")
 
-        with TempDir() as directory_path:
-            output_file_path = directory_path / "output.ass"
+        with TemporaryDirectory() as directory:
+            output_file_path = Path(directory) / "output.ass"
 
             process = subprocess.run(
                 ["ffmpeg", "-i", input_file_path, "-map", "0:s:0", output_file_path],

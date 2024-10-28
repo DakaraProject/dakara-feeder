@@ -1,6 +1,7 @@
 """Song class to extract data from media file."""
 
 import logging
+from pathlib import Path
 
 from dakara_feeder.metadata import (
     FFProbeMetadataParser,
@@ -68,20 +69,20 @@ class BaseSong:
     values (e.g. 0 seconds duration).
 
     Args:
-        base_directory (path.Path): Path to the scanned directory.
+        base_directory (pathlib.Path): Path to the scanned directory.
         paths (directory_lister.SongPaths): Paths of the song file.
 
     Attributes:
         metadata_class (type): Class of the metadata parser to use.
             Default to `dakara_feeder.metadata.FFProbeMetadataParser`.
-        base_directory (path.Path): Path to the scanned directory.
-        video_path (path.Path): Path to the song file, relative to the base
+        base_directory (pathlib.Path): Path to the scanned directory.
+        video_path (pathlib.Path): Path to the song file, relative to the base
             directory.
-        audio_path (path.Path): Path to the audio file, relative to the base
+        audio_path (pathlib.Path): Path to the audio file, relative to the base
             directory.
-        sublitle_path (path.Path): Path to the subtitle file, relative to the
+        sublitle_path (pathlib.Path): Path to the subtitle file, relative to the
             base directory.
-        others_path (list of path.Path): List of paths to the other files,
+        others_path (list of pathlib.Path): List of paths to the other files,
             relative to the base directory.
         metadata (dakara_feeder.metadata.MetadataParser): Object for
             containing metadata of the video file.
@@ -317,8 +318,8 @@ class BaseSong:
         self.pre_process()
         representation = {
             "title": self.get_title(),
-            "filename": str(self.video_path.basename()),
-            "directory": str(self.video_path.dirname()),
+            "filename": str(self.video_path.name),
+            "directory": get_clean_directory(self.video_path.parent),
             "duration": self.get_duration(),
             "has_instrumental": self.get_has_instrumental(),
             "version": self.get_version(),
@@ -332,3 +333,18 @@ class BaseSong:
         self.post_process(representation)
 
         return representation
+
+
+def get_clean_directory(path):
+    """Return an empty string if the provided path is ".".
+
+    Args:
+        path (pathlib.Path): Path to clean.
+
+    Returns:
+        str: String of the path. Empty string if the path is ".".
+    """
+    if path == Path("."):
+        return ""
+
+    return str(path)

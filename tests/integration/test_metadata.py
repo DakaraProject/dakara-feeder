@@ -1,13 +1,8 @@
 from datetime import timedelta
+from importlib.resources import path
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from unittest import TestCase, skipUnless
-
-from path import Path, TempDir
-
-try:
-    from importlib.resources import path
-
-except ImportError:
-    from importlib_resources import path
 
 from dakara_feeder.metadata import (
     FFProbeMetadataParser,
@@ -67,8 +62,8 @@ class FFProbeMetadataParserIntegrationTestCase(TestCase):
 
     def test_parse_invalid_error(self):
         """Test to extract metadata from a file that cannot be parsed."""
-        with TempDir() as temp:
-            file = temp / "file"
+        with TemporaryDirectory() as temp:
+            file = Path(temp) / "file"
             file.write_bytes(b"nonsense")
 
             # call the method

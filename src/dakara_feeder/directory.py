@@ -14,14 +14,14 @@ def list_directory(path):
     """List song files in given directory recursively.
 
     Args:
-        path (path.Path): Path of directory to scan.
+        path (pathlib.Path): Path of directory to scan.
 
     Returns:
         list of SongPaths: Paths of the files for each song. Paths are relative
         to the given path.
     """
     logger.debug("Listing '%s'", path)
-    files_list = [p.relpath(path) for p in path.walkfiles()]
+    files_list = [p.relative_to(path) for p in path.rglob("*") if p.is_file()]
     files_list.sort(key=lambda f: (get_path_without_extension(f), f))
     logger.debug("Listed %i files", len(files_list))
 
@@ -40,24 +40,24 @@ def get_path_without_extension(path):
     """Remove extension from file path.
 
     Args:
-        path (path.Path): Path to a file.
+        path (pathlib.Path): Path to a file.
 
     Returns:
-        path.Path: Path to the file without the extension.
+        pathlib.Path: Path to the file without the extension.
 
     Example:
 
     >>> get_path_without_extension(Path("directory/file0.mkv"))
     ... Path('directory/file0')
     """
-    return path.dirname() / path.stem
+    return path.parent / path.stem
 
 
 def get_main_type(file):
     """Get the first part of the MIME type of the given file.
 
     Args:
-        file (path.Path): Absolute path to the file to extract the MIME type.
+        file (pathlib.Path): Absolute path to the file to extract the MIME type.
 
     Returns
         str: Main type if the MIME type can be extracted, `None` otherwise.
@@ -75,8 +75,8 @@ def group_by_type(files, path):
     """Group files by extension.
 
     Args:
-        files (list of path.Path): List of relative path to the files to group.
-        path (path.Path): Path of directory to scan.
+        files (list of pathlib.Path): List of relative path to the files to group.
+        path (pathlib.Path): Path of directory to scan.
 
     Returns:
         list of SongPaths: Paths of the files for each song.
@@ -133,10 +133,10 @@ class SongPaths:
     """Paths of files related to a song.
 
     Attributes:
-        video (path.Path): Path to the video file.
-        audio (path.Path): Path to the audio file.
-        subtitle (path.Path): Path to the subtitle file.
-        others (list of path.Path): Paths of other files.
+        video (pathlib.Path): Path to the video file.
+        audio (pathlib.Path): Path to the audio file.
+        subtitle (pathlib.Path): Path to the subtitle file.
+        others (list of pathlib.Path): Paths of other files.
     """
 
     def __init__(self, video, audio=None, subtitle=None, others=None):

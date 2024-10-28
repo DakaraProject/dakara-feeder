@@ -18,7 +18,7 @@ class TagsFeeder:
 
     Args:
         config (dict): Dictionary of config.
-        tags_file_path (path.Path): Path to the tags file.
+        tags_file_path (pathlib.Path): Path to the tags file.
         progress (bool): If `True`, a progress bar is displayed during long tasks.
 
     Attributes:

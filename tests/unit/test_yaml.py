@@ -1,8 +1,8 @@
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
 
 import yaml
-from path import Path
 
 from dakara_feeder.yaml import (
     YamlContentInvalidError,

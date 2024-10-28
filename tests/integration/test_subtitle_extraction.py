@@ -1,12 +1,6 @@
+from importlib.resources import path
+from pathlib import Path
 from unittest import TestCase, skipUnless
-
-from path import Path
-
-try:
-    from importlib.resources import path
-
-except ImportError:
-    from importlib_resources import path
 
 from dakara_feeder.subtitle.extraction import FFmpegSubtitleExtractor
 

@@ -12,10 +12,13 @@ def is_subtitle(filename):
 
     Check the admissible file extensions for pysubs2.
 
+    Args:
+        filename (pathlib.Path): Path of the file to check.
+
     Returns:
         bool: `True` if the filename is a subtitle.
     """
-    return filename.ext in pysubs2.formats.FILE_EXTENSION_TO_FORMAT_IDENTIFIER
+    return filename.suffix in pysubs2.formats.FILE_EXTENSION_TO_FORMAT_IDENTIFIER
 
 
 class SubtitleParser(ABC):
@@ -35,7 +38,7 @@ class SubtitleParser(ABC):
         """Read a subtitle file and store the lyrics.
 
         Args:
-            filepath (path.Path): Path of the file to extract lyrics from.
+            filepath (pathlib.Path): Path of the file to extract lyrics from.
 
         Returns:
             SubtitleParser: Instance of the class for the given file.
@@ -67,7 +70,7 @@ class TXTSubtitleParser(SubtitleParser):
 
     Example:
 
-    >>> from Path import path
+    >>> from Pathlib import path
     >>> file_path = Path("path/to/file")
     >>> subtitle = TXTSubtitleParser.parse(file_path)
     >>> subtitle.get_lyrics()
@@ -82,7 +85,7 @@ class TXTSubtitleParser(SubtitleParser):
         """Read a subtitle file and store the lyrics.
 
         Args:
-            filepath (path.Path): Path of the file to extract lyrics from.
+            filepath (pathlib.Path): Path of the file to extract lyrics from.
 
         Returns:
             TXTSubtitleParser: Instance of the class for the given file.
@@ -119,7 +122,7 @@ class Pysubs2SubtitleParser(SubtitleParser):
 
     It can be used with:
 
-    >>> from Path import path
+    >>> from Pathlib import path
     >>> file_path = Path("path/to/file")
     >>> subtitle = Pysubs2SubtitleParser.parse(file_path)
     >>> subtitle.get_lyrics()
@@ -154,7 +157,7 @@ class Pysubs2SubtitleParser(SubtitleParser):
         """Read a subtitle file and store the lyrics.
 
         Args:
-            filepath (path.Path): Path of the file to extract lyrics from.
+            filepath (pathlib.Path): Path of the file to extract lyrics from.
 
         Returns:
             Pysubs2SubtitleParser: Instance of the class for the given file.

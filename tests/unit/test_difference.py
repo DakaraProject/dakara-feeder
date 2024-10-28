@@ -1,6 +1,5 @@
+from pathlib import Path
 from unittest import TestCase
-
-from path import Path
 
 from dakara_feeder import difference
 from dakara_feeder.similarity import calculate_file_path_similarity
@@ -51,6 +50,24 @@ class MatchSimilarTestCase(TestCase):
 
     def test_simple(self):
         """Test basic similar name matching."""
+        list1 = [Path("directory/file.mp4")]
+        list2 = [Path("directory/file.mp4")]
+
+        similar, remaining1, remaining2 = difference.match_similar(
+            list1, list2, calculate_file_path_similarity
+        )
+
+        self.assertCountEqual(
+            similar,
+            [
+                (Path("directory/file.mp4"), Path("directory/file.mp4")),
+            ],
+        )
+        self.assertCountEqual(remaining1, [])
+        self.assertCountEqual(remaining2, [])
+
+    def test_complex(self):
+        """Test similar name matching."""
 
         list1 = [
             Path("directory/file.mp4"),
@@ -73,10 +90,10 @@ class MatchSimilarTestCase(TestCase):
         self.assertCountEqual(
             similar,
             [
-                ("directory/file.mp4", "directory/fil.mp4"),
-                ("other/file.mp4", "other/fil.mp4"),
-                ("directory/other.mp4", "other/other.mp4"),
+                (Path("directory/file.mp4"), Path("directory/fil.mp4")),
+                (Path("other/file.mp4"), Path("other/fil.mp4")),
+                (Path("directory/other.mp4"), Path("other/other.mp4")),
             ],
         )
-        self.assertCountEqual(remaining1, ["directory/newfile.mkv"])
-        self.assertCountEqual(remaining2, ["directory/oldfile.mkv"])
+        self.assertCountEqual(remaining1, [Path("directory/newfile.mkv")])
+        self.assertCountEqual(remaining2, [Path("directory/oldfile.mkv")])

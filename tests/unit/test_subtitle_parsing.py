@@ -1,13 +1,7 @@
+from importlib.resources import path
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
-
-from path import Path
-
-try:
-    from importlib.resources import path
-
-except ImportError:
-    from importlib_resources import path
 
 from dakara_feeder.subtitle.parsing import (
     Pysubs2SubtitleParser,
@@ -51,7 +45,7 @@ class Pysubs2SubtitleParserTestCase(TestCase):
 
         # open expected result
         with path("tests.resources.subtitles", file_name + "_expected") as file:
-            expected_lines = Path(file).lines(retain=False)
+            expected_lines = Path(file).read_text().splitlines()
 
         # check against expected file
         self.assertListEqual(lines, expected_lines)
@@ -71,7 +65,7 @@ class Pysubs2SubtitleParserTestCase(TestCase):
 
         # open expected result
         with path("tests.resources.subtitles", "simple.ass_expected") as file:
-            expected_lines = Path(file).lines(retain=False)
+            expected_lines = Path(file).read_text().splitlines()
 
         # check against expected file
         self.assertListEqual(lines, expected_lines)

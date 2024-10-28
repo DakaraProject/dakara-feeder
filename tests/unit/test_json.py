@@ -1,8 +1,7 @@
 from json import dumps
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
-
-from path import Path
 
 from dakara_feeder.json import (
     JsonContentInvalidError,

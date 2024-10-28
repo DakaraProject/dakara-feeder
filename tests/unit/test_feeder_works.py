@@ -1,7 +1,6 @@
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import call, patch
-
-from path import Path
 
 from dakara_feeder.feeder.works import WorkInvalidError, WorksFeeder, WorksInvalidError
 
