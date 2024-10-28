@@ -1,7 +1,7 @@
 import inspect
-import re
 from importlib import resources
 from pathlib import Path
+from re import escape
 from types import ModuleType
 from unittest import TestCase
 from unittest.mock import patch
@@ -263,7 +263,7 @@ class ImportFromFileTestCase(TestCase):
         """Test to import a non existing file."""
         with self.assertRaisesRegex(
             customization.InvalidObjectModuleNameError,
-            re.escape(f'No module found from file {Path("path/to/nowhere.py")}'),
+            escape(f'No module found from file {Path("path/to/nowhere.py")}'),
         ):
             customization.import_from_file(Path("path/to/nowhere.py"))
 
