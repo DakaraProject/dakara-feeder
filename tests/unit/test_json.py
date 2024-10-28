@@ -37,7 +37,8 @@ class GetJsonFileContentTestCase(TestCase):
 
         # call the method
         with self.assertRaisesRegex(
-            JsonFileNotFoundError, "Unable to find JSON file 'path/to/file'"
+            JsonFileNotFoundError,
+            f"Unable to find JSON file '{Path('path/to/file')}'",
         ):
             get_json_file_content(Path("path/to/file"))
 
@@ -50,7 +51,7 @@ class GetJsonFileContentTestCase(TestCase):
         # call the method
         with self.assertRaisesRegex(
             JsonFileInvalidError,
-            "Unable to parse JSON file 'path/to/file':",
+            f"Unable to parse JSON file '{Path('path/to/file')}':",
         ):
             get_json_file_content(Path("path/to/file"))
 
@@ -78,6 +79,6 @@ class GetJsonFileContentTestCase(TestCase):
         # call the method
         with self.assertRaisesRegex(
             JsonContentInvalidError,
-            "Unable to find key 'other' in JSON file 'path/to/file'",
+            f"Unable to find key 'other' in JSON file '{Path('path/to/file')}'",
         ):
             get_json_file_content(Path("path/to/file"), "other")

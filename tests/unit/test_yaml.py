@@ -38,7 +38,7 @@ class GetYamlFileContentTestCase(TestCase):
 
         # call the method
         with self.assertRaisesRegex(
-            YamlFileNotFoundError, "Unable to find YAML file 'path/to/file'"
+            YamlFileNotFoundError, f"Unable to find YAML file '{Path('path/to/file')}'"
         ):
             get_yaml_file_content(Path("path/to/file"))
 
@@ -53,7 +53,7 @@ class GetYamlFileContentTestCase(TestCase):
         # call the method
         with self.assertRaisesRegex(
             YamlFileInvalidError,
-            "Unable to parse YAML file 'path/to/file': error message",
+            f"Unable to parse YAML file '{Path('path/to/file')}': error message",
         ):
             get_yaml_file_content(Path("path/to/file"))
 
@@ -81,6 +81,6 @@ class GetYamlFileContentTestCase(TestCase):
         # call the method
         with self.assertRaisesRegex(
             YamlContentInvalidError,
-            "Unable to find key 'other' in YAML file 'path/to/file'",
+            f"Unable to find key 'other' in YAML file '{Path('path/to/file')}'",
         ):
             get_yaml_file_content(Path("path/to/file"), "other")
