@@ -12,7 +12,6 @@ from dakara_feeder.directory import list_directory
 from dakara_feeder.similarity import calculate_file_path_similarity
 from dakara_feeder.song import BaseSong
 from dakara_feeder.utils import divide_chunks
-from dakara_feeder.version import check_version
 from dakara_feeder.web_client import HTTPClientDakara
 
 logger = logging.getLogger(__name__)
@@ -58,9 +57,6 @@ class SongsFeeder:
 
     def load(self):
         """Execute side-effect initialization tasks."""
-        # check version
-        check_version()
-
         # select song class
         if self.song_class_module_name:
             self.song_class = get_custom_song(self.song_class_module_name)

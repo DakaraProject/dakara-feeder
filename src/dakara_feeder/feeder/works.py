@@ -8,7 +8,6 @@ from dakara_base.progress_bar import null_bar, progress_bar
 from dakara_feeder.difference import generate_diff
 from dakara_feeder.json import get_json_file_content
 from dakara_feeder.utils import divide_chunks
-from dakara_feeder.version import check_version
 from dakara_feeder.web_client import HTTPClientDakara
 
 logger = logging.getLogger(__name__)
@@ -45,9 +44,6 @@ class WorksFeeder:
 
     def load(self):
         """Execute side-effect initialization tasks."""
-        # check version
-        check_version()
-
         # authenticate to server
         self.http_client.load()
         self.http_client.authenticate()

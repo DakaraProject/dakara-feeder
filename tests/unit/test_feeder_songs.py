@@ -20,10 +20,8 @@ class SongsFeederTestCase(TestCase):
 
     @patch.object(SongsFeeder, "check_kara_folder_path", autoset=True)
     @patch("dakara_feeder.feeder.songs.get_custom_song", autoset=True)
-    @patch("dakara_feeder.feeder.songs.check_version", autoset=True)
     def test_load_no_song_class(
         self,
-        mocked_check_version,
         mocked_get_custom_song,
         mocked_check_kara_folder_path,
         mocked_http_client_class,
@@ -42,17 +40,14 @@ class SongsFeederTestCase(TestCase):
         self.assertIs(feeder.song_class, BaseSong)
 
         # assert the call
-        mocked_check_version.assert_called_with()
         mocked_get_custom_song.assert_not_called()
         mocked_check_kara_folder_path.assert_called_with()
         mocked_http_client_class.return_value.authenticate.assert_called_with()
 
     @patch.object(SongsFeeder, "check_kara_folder_path", autoset=True)
     @patch("dakara_feeder.feeder.songs.get_custom_song", autoset=True)
-    @patch("dakara_feeder.feeder.songs.check_version", autoset=True)
     def test_load_with_song_class(
         self,
-        mocked_check_version,
         mocked_get_custom_song,
         mocked_check_kara_folder_path,
         mocked_http_client_class,

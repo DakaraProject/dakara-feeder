@@ -16,8 +16,7 @@ class WorkTypesFeederTestCase(TestCase):
         # create base config
         self.config = {"server": {}, "kara_folder": "basepath"}
 
-    @patch("dakara_feeder.feeder.work_types.check_version", autoset=True)
-    def test_load(self, mocked_check_version, mocked_http_client_class):
+    def test_load(self, mocked_http_client_class):
         """Test to run side-effect tasks."""
         # create the object
         feeder = WorkTypesFeeder(self.config, "path/to/file", progress=False)
@@ -26,7 +25,6 @@ class WorkTypesFeederTestCase(TestCase):
         feeder.load()
 
         # assert the call
-        mocked_check_version.assert_called_with()
         mocked_http_client_class.return_value.authenticate.assert_called_with()
 
     @patch("dakara_feeder.feeder.work_types.get_yaml_file_content", autoset=True)

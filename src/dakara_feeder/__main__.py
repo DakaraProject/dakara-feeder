@@ -18,6 +18,7 @@ from dakara_base.exceptions import (
     generate_exception_handler,
     handle_all_exceptions,
 )
+from dakara_base.version_check import check_version
 
 from dakara_feeder.feeder.songs import SongsFeeder
 from dakara_feeder.feeder.tags import TagsFeeder
@@ -287,6 +288,8 @@ def main():
     """Main command."""
     parser = get_parser()
     args = parser.parse_args()
+
+    check_version("feeder", __version__, __date__, logger)
 
     with handle_all_exceptions(
         bugtracker_url="https://github.com/DakaraProject/dakara-feeder/issues",

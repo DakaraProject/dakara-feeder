@@ -16,10 +16,8 @@ class WorksFeederTestCase(TestCase):
         # create works file path
         self.works_file_path = Path("works")
 
-    @patch("dakara_feeder.feeder.works.check_version", autoset=True)
     def test_load(
         self,
-        mocked_check_version,
         mocked_http_client_class,
     ):
         """Test to run side-effect tasks."""
@@ -30,7 +28,6 @@ class WorksFeederTestCase(TestCase):
         feeder.load()
 
         # assert the call
-        mocked_check_version.assert_called_with()
         mocked_http_client_class.return_value.authenticate.assert_called_with()
 
     def test_check(
