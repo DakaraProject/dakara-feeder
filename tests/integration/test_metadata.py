@@ -1,13 +1,8 @@
 from datetime import timedelta
+from importlib.resources import path
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from unittest import TestCase, skipUnless
-
-from path import Path, TempDir
-
-try:
-    from importlib.resources import path
-
-except ImportError:
-    from importlib_resources import path
 
 from dakara_feeder.metadata import (
     FFProbeMetadataParser,
@@ -32,7 +27,7 @@ class MediainfoMetadataParserIntegrationTestCase(TestCase):
     def test_get_duration(self):
         """Test to get duration."""
         with path("tests.resources.media", "dummy.mkv") as file:
-            parser = MediainfoMetadataParser.parse(Path(file))
+            parser = MediainfoMetadataParser.parse(file)
 
         self.assertEqual(
             parser.get_duration(), timedelta(seconds=2, microseconds=23000)
@@ -41,14 +36,14 @@ class MediainfoMetadataParserIntegrationTestCase(TestCase):
     def test_get_number_audio_tracks(self):
         """Test to get number of audio tracks."""
         with path("tests.resources.media", "dummy.mkv") as file:
-            parser = MediainfoMetadataParser.parse(Path(file))
+            parser = MediainfoMetadataParser.parse(file)
 
         self.assertEqual(parser.get_audio_tracks_count(), 2)
 
     def test_get_number_subtitle_tracks(self):
         """Test to get number of subtitle tracks."""
         with path("tests.resources.media", "dummy.mkv") as file:
-            parser = MediainfoMetadataParser.parse(Path(file))
+            parser = MediainfoMetadataParser.parse(file)
 
         self.assertEqual(parser.get_subtitle_tracks_count(), 1)
 
@@ -67,8 +62,8 @@ class FFProbeMetadataParserIntegrationTestCase(TestCase):
 
     def test_parse_invalid_error(self):
         """Test to extract metadata from a file that cannot be parsed."""
-        with TempDir() as temp:
-            file = temp / "file"
+        with TemporaryDirectory() as temp:
+            file = Path(temp) / "file"
             file.write_bytes(b"nonsense")
 
             # call the method
@@ -80,7 +75,7 @@ class FFProbeMetadataParserIntegrationTestCase(TestCase):
     def test_get_duration(self):
         """Test to get duration."""
         with path("tests.resources.media", "dummy.mkv") as file:
-            parser = FFProbeMetadataParser.parse(Path(file))
+            parser = FFProbeMetadataParser.parse(file)
 
         self.assertEqual(
             parser.get_duration(), timedelta(seconds=2, microseconds=23000)
@@ -89,13 +84,13 @@ class FFProbeMetadataParserIntegrationTestCase(TestCase):
     def test_get_number_audio_tracks(self):
         """Test to get number of audio tracks."""
         with path("tests.resources.media", "dummy.mkv") as file:
-            parser = FFProbeMetadataParser.parse(Path(file))
+            parser = FFProbeMetadataParser.parse(file)
 
         self.assertEqual(parser.get_audio_tracks_count(), 2)
 
     def test_get_number_subtitle_tracks(self):
         """Test to get number of subtitle tracks."""
         with path("tests.resources.media", "dummy.mkv") as file:
-            parser = FFProbeMetadataParser.parse(Path(file))
+            parser = FFProbeMetadataParser.parse(file)
 
         self.assertEqual(parser.get_subtitle_tracks_count(), 1)

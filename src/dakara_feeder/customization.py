@@ -5,9 +5,9 @@ import inspect
 import logging
 import sys
 from contextlib import contextmanager
+from pathlib import Path
 
 from dakara_base.exceptions import DakaraError
-from path import Path
 
 from dakara_feeder.song import BaseSong
 
@@ -98,7 +98,7 @@ def split_path_object(string):
     Returns:
         tuple: Contains:
 
-        1. path.Path: The path of the file;
+        1. pathlib.Path: The path of the file;
         2. str: The object name.
     """
     # if nothing is given
@@ -131,14 +131,14 @@ def dir_in_path(directory):
     manager.
 
     Args:
-        directory (path.Path): Directory to add.
+        directory (pathlib.Path): Directory to add.
     """
     # get copy of system path
     old_path_list = sys.path.copy()
 
     try:
         # prepend the directory in path
-        sys.path.insert(0, str(directory.expand()))
+        sys.path.insert(0, str(directory.expanduser()))
         yield None
 
     finally:
@@ -150,7 +150,7 @@ def import_from_file(file_path):
     """Import a custom file as a module.
 
     Args:
-        file_path (path.Path): Path to a Python file to import.
+        file_path (pathlib.Path): Path to a Python file to import.
 
     Returns:
         type: Imported module.

@@ -1,8 +1,8 @@
 from json import dumps
+from pathlib import Path
+from re import escape
 from unittest import TestCase
 from unittest.mock import patch
-
-from path import Path
 
 from dakara_feeder.json import (
     JsonContentInvalidError,
@@ -38,7 +38,8 @@ class GetJsonFileContentTestCase(TestCase):
 
         # call the method
         with self.assertRaisesRegex(
-            JsonFileNotFoundError, "Unable to find JSON file 'path/to/file'"
+            JsonFileNotFoundError,
+            escape(f"Unable to find JSON file '{Path('path/to/file')}'"),
         ):
             get_json_file_content(Path("path/to/file"))
 
@@ -51,7 +52,7 @@ class GetJsonFileContentTestCase(TestCase):
         # call the method
         with self.assertRaisesRegex(
             JsonFileInvalidError,
-            "Unable to parse JSON file 'path/to/file':",
+            escape(f"Unable to parse JSON file '{Path('path/to/file')}':"),
         ):
             get_json_file_content(Path("path/to/file"))
 
@@ -79,6 +80,6 @@ class GetJsonFileContentTestCase(TestCase):
         # call the method
         with self.assertRaisesRegex(
             JsonContentInvalidError,
-            "Unable to find key 'other' in JSON file 'path/to/file'",
+            escape(f"Unable to find key 'other' in JSON file '{Path('path/to/file')}'"),
         ):
             get_json_file_content(Path("path/to/file"), "other")

@@ -1,13 +1,8 @@
+from importlib.resources import path
+from shutil import copy
+from tempfile import TemporaryDirectory
 from unittest import TestCase, skipUnless
 from unittest.mock import patch
-
-try:
-    from importlib.resources import path
-
-except ImportError:
-    from importlib_resources import path
-
-from path import Path, TempDir
 
 from dakara_feeder.feeder.songs import SongsFeeder
 from dakara_feeder.metadata import FFProbeMetadataParser
@@ -24,13 +19,13 @@ class SongsFeederIntegrationTestCase(TestCase):
         mocked_http_client_dakara_class.return_value.retrieve_songs.return_value = []
 
         # create the object
-        with TempDir() as temp:
+        with TemporaryDirectory() as temp:
             # copy required files
             with path("tests.resources.media", "dummy.ass") as file:
-                Path(file).copy(temp)
+                copy(file, temp)
 
             with path("tests.resources.media", "dummy.mkv") as file:
-                Path(file).copy(temp)
+                copy(file, temp)
 
             config = {"server": {}, "kara_folder": str(temp)}
             feeder = SongsFeeder(config, progress=False)

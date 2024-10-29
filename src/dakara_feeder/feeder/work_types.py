@@ -6,7 +6,6 @@ from dakara_base.exceptions import DakaraError
 from dakara_base.progress_bar import null_bar, progress_bar
 
 from dakara_feeder.utils import clean_dict
-from dakara_feeder.version import check_version
 from dakara_feeder.web_client import HTTPClientDakara, WorkTypeAlreadyExistsError
 from dakara_feeder.yaml import get_yaml_file_content
 
@@ -18,7 +17,7 @@ class WorkTypesFeeder:
 
     Args:
         config (dict): Dictionary of config.
-        work_types_file_path (path.Path): Path to the work types file.
+        work_types_file_path (pathlib.Path): Path to the work types file.
         progress (bool): If `True`, a progress bar is displayed during long tasks.
 
     Attributes:
@@ -35,9 +34,6 @@ class WorkTypesFeeder:
 
     def load(self):
         """Execute side-effect initialization tasks."""
-        # check version
-        check_version()
-
         # authenticate to server
         self.http_client.load()
         self.http_client.authenticate()

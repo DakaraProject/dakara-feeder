@@ -1,10 +1,10 @@
 """Feeder for songs."""
 
 import logging
+from pathlib import Path
 
 from dakara_base.exceptions import DakaraError
 from dakara_base.progress_bar import null_bar, progress_bar
-from path import Path
 
 from dakara_feeder.customization import get_custom_song
 from dakara_feeder.difference import generate_diff, match_similar
@@ -12,7 +12,6 @@ from dakara_feeder.directory import list_directory
 from dakara_feeder.similarity import calculate_file_path_similarity
 from dakara_feeder.song import BaseSong
 from dakara_feeder.utils import divide_chunks
-from dakara_feeder.version import check_version
 from dakara_feeder.web_client import HTTPClientDakara
 
 logger = logging.getLogger(__name__)
@@ -34,8 +33,8 @@ class SongsFeeder:
 
     Attributes:
         http_client (web_client.HTTPClientDakara): Client for the Dakara server.
-        kara_folder_path (path.Path): Path to the scanned folder containing karaoke
-            files.
+        kara_folder_path (pathlib.Path): Path to the scanned folder containing
+            karaoke files.
         songs_per_chunk (int): Number of songs per chunk to send to server when
             creating songs.
         bar (function): Progress bar to use.
@@ -58,9 +57,6 @@ class SongsFeeder:
 
     def load(self):
         """Execute side-effect initialization tasks."""
-        # check version
-        check_version()
-
         # select song class
         if self.song_class_module_name:
             self.song_class = get_custom_song(self.song_class_module_name)
@@ -78,7 +74,7 @@ class SongsFeeder:
         Raises:
             KaraFolderNotFound: If the karaoke folder does not exist.
         """
-        if not self.kara_folder_path.isdir():
+        if not self.kara_folder_path.is_dir():
             raise KaraFolderNotFound(
                 "Karaoke folder '{}' does not exist".format(self.kara_folder_path)
             )

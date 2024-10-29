@@ -1,6 +1,5 @@
+from pathlib import Path
 from unittest import TestCase
-
-from path import Path
 
 from dakara_feeder.similarity import calculate_file_path_similarity
 

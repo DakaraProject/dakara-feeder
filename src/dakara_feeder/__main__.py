@@ -3,6 +3,7 @@
 import logging
 import sys
 from argparse import ArgumentParser
+from pathlib import Path
 
 from dakara_base.config import (
     Config,
@@ -17,7 +18,7 @@ from dakara_base.exceptions import (
     generate_exception_handler,
     handle_all_exceptions,
 )
-from path import Path
+from dakara_base.version_check import check_version
 
 from dakara_feeder.feeder.songs import SongsFeeder
 from dakara_feeder.feeder.tags import TagsFeeder
@@ -36,7 +37,7 @@ handle_config_not_found = generate_exception_handler(
 handle_config_incomplete = generate_exception_handler(
     DakaraError,
     "Config may be incomplete, please check '{}'".format(
-        directories.user_config_dir / CONFIG_FILE
+        directories.user_config_path / CONFIG_FILE
     ),
 )
 
@@ -182,6 +183,7 @@ def create_config(args):
         args (argparse.Namespace): Arguments from command line.
     """
     create_logger(custom_log_format="%(message)s", custom_log_level="INFO")
+    check_version("feeder", __version__, __date__, logger)
     create_config_file("dakara_feeder.resources", CONFIG_FILE, args.force)
     logger.info("Please edit this file")
 
@@ -195,10 +197,11 @@ def feed_songs(args):
     with handle_config_not_found():
         create_logger(wrap=True)
         config = Config(CONFIG_PREFIX)
-        config.load_file(directories.user_config_dir / CONFIG_FILE)
+        config.load_file(directories.user_config_path / CONFIG_FILE)
         config.check_mandatory_keys(["kara_folder", "server"])
         config.set_debug(args.debug)
         set_loglevel(config)
+    check_version("feeder", __version__, __date__, logger)
 
     feeder = SongsFeeder(
         config, force_update=args.force, prune=args.prune, progress=args.progress
@@ -219,10 +222,11 @@ def feed_works(args):
     with handle_config_not_found():
         create_logger(wrap=True)
         config = Config(CONFIG_PREFIX)
-        config.load_file(directories.user_config_dir / CONFIG_FILE)
+        config.load_file(directories.user_config_path / CONFIG_FILE)
         config.check_mandatory_keys(["server"])
         config.set_debug(args.debug)
         set_loglevel(config)
+    check_version("feeder", __version__, __date__, logger)
 
     feeder = WorksFeeder(
         config,
@@ -246,10 +250,11 @@ def feed_tags(args):
     with handle_config_not_found():
         create_logger(wrap=True)
         config = Config(CONFIG_PREFIX)
-        config.load_file(directories.user_config_dir / CONFIG_FILE)
+        config.load_file(directories.user_config_path / CONFIG_FILE)
         config.check_mandatory_keys(["server"])
         config.set_debug(args.debug)
         set_loglevel(config)
+    check_version("feeder", __version__, __date__, logger)
 
     feeder = TagsFeeder(config, tags_file_path=args.file, progress=args.progress)
 
@@ -268,10 +273,12 @@ def feed_work_types(args):
     with handle_config_not_found():
         create_logger(wrap=True)
         config = Config(CONFIG_PREFIX)
-        config.load_file(directories.user_config_dir / CONFIG_FILE)
+        config.load_file(directories.user_config_path / CONFIG_FILE)
         config.check_mandatory_keys(["server"])
         config.set_debug(args.debug)
         set_loglevel(config)
+
+    check_version("feeder", __version__, __date__, logger)
 
     feeder = WorkTypesFeeder(
         config, work_types_file_path=args.file, progress=args.progress

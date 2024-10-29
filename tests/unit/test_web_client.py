@@ -1,7 +1,6 @@
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import ANY, patch
-
-from path import Path
 
 from dakara_feeder import web_client
 
@@ -51,8 +50,8 @@ class HTTPClientDakaraTestCase(TestCase):
         self.assertCountEqual(
             songs_list,
             [
-                {"path": Path("directory_0") / "song_0.mp4", "id": 0},
-                {"path": Path("directory_1") / "song_1.mp4", "id": 1},
+                {"path": Path("directory_0/song_0.mp4"), "id": 0},
+                {"path": Path("directory_1/song_1.mp4"), "id": 1},
             ],
         )
 

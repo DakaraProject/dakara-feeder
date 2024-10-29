@@ -9,8 +9,8 @@ def calculate_file_path_similarity(path1, path2, weight_dirname=1, weight_basena
     Use a simple weighted sum formula.
 
     Args:
-        path1 (path.Path): Path to compare.
-        path2 (path.Path): Path to compare.
+        path1 (pathlib.Path): Path to compare.
+        path2 (pathlib.Path): Path to compare.
         weight_dirname (float): Importance of the directory name in similarity
             calculation. Result is divided by the sum of all weights.
         weight_basename (float): Importance of the base name in similarity
@@ -21,10 +21,10 @@ def calculate_file_path_similarity(path1, path2, weight_dirname=1, weight_basena
         and 1. 1 representing high similarity.
     """
     basename_similarity = compute_symmetric_gestalt_pattern_matching(
-        path1.basename(), path2.basename()
+        path1.name, path2.name
     )
     dirname_similarity = compute_symmetric_gestalt_pattern_matching(
-        path1.dirname(), path2.dirname()
+        str(path1.parent), str(path2.parent)
     )
 
     return (

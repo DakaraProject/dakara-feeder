@@ -35,8 +35,8 @@ def match_similar(list1, list2, compute_similarity, threshold=0.8):
     """Match similar strings between two lists using a provided method.
 
     Args:
-        list1 (list): Elements to match.
-        list2 (list): Elements to match.
+        list1 (list of pathlib.Path): Elements to match.
+        list2 (list of pathlib.Path): Elements to match.
         compute_similarity (function): Funtion taking as argument element from
             first list and element from second list. Should return a float
             between 0 and 1 indicating similarity (1 meaning high similarity,

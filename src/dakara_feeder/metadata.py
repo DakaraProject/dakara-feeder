@@ -70,7 +70,7 @@ class NullMetadataParser(MetadataParser):
 
     It can be used with:
 
-    >>> from Path import path
+    >>> from Pathlib import path
     >>> file_path = Path("path/to/file")
     >>> metadata = NullMetadataParser.parse(file_path)
     >>> metadata.get_duration()
@@ -105,7 +105,7 @@ class MediainfoMetadataParser(MetadataParser):
 
     It can be used with:
 
-    >>> from Path import path
+    >>> from Pathlib import path
     >>> file_path = Path("path/to/file")
     >>> metadata = MediainfoMetadataParser.parse(file_path)
     >>> metadata.get_duration()
@@ -174,7 +174,7 @@ class FFProbeMetadataParser(MetadataParser):
 
     It can be used with:
 
-    >>> from Path import path
+    >>> from Pathlib import path
     >>> file_path = Path("path/to/file")
     >>> metadata = FFProbeMetadataParser.parse(file_path)
     >>> metadata.get_duration()
@@ -199,7 +199,7 @@ class FFProbeMetadataParser(MetadataParser):
         """Parse metadata from file name.
 
         Args:
-            filename (path.Path): Path of the file to parse.
+            filename (pathlib.Path): Path of the file to parse.
 
         Raises:
             FFProbeNotInstalledError: If FFProbe is not installed.

@@ -1,8 +1,8 @@
 from datetime import timedelta
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import ANY, patch
 
-from path import Path
 from pymediainfo import MediaInfo
 
 from dakara_feeder.metadata import (

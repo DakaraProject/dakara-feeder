@@ -1,13 +1,6 @@
+from importlib.resources import path
 from unittest import TestCase
 from unittest.mock import call, patch
-
-try:
-    from importlib.resources import path
-
-except ImportError:
-    from importlib_resources import path
-
-from path import Path
 
 from dakara_feeder.feeder.works import WorksFeeder
 
@@ -41,7 +34,7 @@ class WorksFeederIntegrationTestCase(TestCase):
         with path(
             "tests.integration.resources.works", "correct_work_file.json"
         ) as filepath:
-            feeder = WorksFeeder(self.config, Path(filepath), progress=False)
+            feeder = WorksFeeder(self.config, filepath, progress=False)
 
             # call the method
             with self.assertLogs("dakara_feeder.feeder.works", "DEBUG"):

@@ -1,8 +1,7 @@
+from pathlib import Path
 from subprocess import DEVNULL
 from unittest import TestCase
 from unittest.mock import patch
-
-from path import Path
 
 from dakara_feeder.subtitle.extraction import (
     FFmpegNotInstalledError,

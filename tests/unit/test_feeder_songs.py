@@ -1,8 +1,7 @@
 from datetime import timedelta
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
-
-from path import Path
 
 from dakara_feeder.directory import SongPaths
 from dakara_feeder.feeder.songs import KaraFolderNotFound, SongsFeeder
@@ -21,10 +20,8 @@ class SongsFeederTestCase(TestCase):
 
     @patch.object(SongsFeeder, "check_kara_folder_path", autoset=True)
     @patch("dakara_feeder.feeder.songs.get_custom_song", autoset=True)
-    @patch("dakara_feeder.feeder.songs.check_version", autoset=True)
     def test_load_no_song_class(
         self,
-        mocked_check_version,
         mocked_get_custom_song,
         mocked_check_kara_folder_path,
         mocked_http_client_class,
@@ -43,17 +40,14 @@ class SongsFeederTestCase(TestCase):
         self.assertIs(feeder.song_class, BaseSong)
 
         # assert the call
-        mocked_check_version.assert_called_with()
         mocked_get_custom_song.assert_not_called()
         mocked_check_kara_folder_path.assert_called_with()
         mocked_http_client_class.return_value.authenticate.assert_called_with()
 
     @patch.object(SongsFeeder, "check_kara_folder_path", autoset=True)
     @patch("dakara_feeder.feeder.songs.get_custom_song", autoset=True)
-    @patch("dakara_feeder.feeder.songs.check_version", autoset=True)
     def test_load_with_song_class(
         self,
-        mocked_check_version,
         mocked_get_custom_song,
         mocked_check_kara_folder_path,
         mocked_http_client_class,
@@ -88,13 +82,13 @@ class SongsFeederTestCase(TestCase):
         # assert the call
         mocked_get_custom_song.assert_called_with("module.MySong")
 
-    @patch.object(Path, "isdir", autoset=True)
+    @patch.object(Path, "is_dir", autoset=True)
     def test_check_kara_folder_path_exists(
-        self, mocked_isdir, mocked_http_client_class
+        self, mocked_is_dir, mocked_http_client_class
     ):
         """Test to check when the kara folder exists."""
         # setup the mock
-        mocked_isdir.return_value = True
+        mocked_is_dir.return_value = True
 
         # create the object
         feeder = SongsFeeder(self.config)
@@ -103,15 +97,15 @@ class SongsFeederTestCase(TestCase):
         feeder.check_kara_folder_path()
 
         # assert the call
-        mocked_isdir.assert_called_with()
+        mocked_is_dir.assert_called_with()
 
-    @patch.object(Path, "isdir", autoset=True)
+    @patch.object(Path, "is_dir", autoset=True)
     def test_check_kara_folder_path_not_exists(
-        self, mocked_isdir, mocked_http_client_class
+        self, mocked_is_dir, mocked_http_client_class
     ):
         """Test to check when the kara folder does not exists."""
         # setup the mock
-        mocked_isdir.return_value = False
+        mocked_is_dir.return_value = False
 
         # create the object
         feeder = SongsFeeder(self.config)
@@ -135,16 +129,16 @@ class SongsFeederTestCase(TestCase):
         """Test to feed."""
         # create the mocks
         mocked_http_client_class.return_value.retrieve_songs.return_value = [
-            {"id": 0, "path": Path("directory_0") / "song_0.mp4"},
-            {"id": 1, "path": Path("directory_1") / "music_1.mp4"},
+            {"id": 0, "path": Path("directory_0/song_0.mp4")},
+            {"id": 1, "path": Path("directory_1/music_1.mp4")},
         ]
         mocked_http_client_class.return_value.prune_artists.return_value = 2
         mocked_http_client_class.return_value.prune_works.return_value = 1
         mocked_list_directory.return_value = [
-            SongPaths(Path("directory_0") / "song_0.mp4"),
+            SongPaths(Path("directory_0/song_0.mp4")),
             SongPaths(
-                Path("directory_2") / "song_2.mp4",
-                subtitle=Path("directory_2") / "song_2.ass",
+                Path("directory_2/song_2.mp4"),
+                subtitle=Path("directory_2/song_2.ass"),
             ),
         ]
         mocked_metadata_parse.return_value.get_duration.return_value = timedelta(
@@ -163,7 +157,7 @@ class SongsFeederTestCase(TestCase):
 
         # assert the mocked calls
         mocked_http_client_class.return_value.retrieve_songs.assert_called_with()
-        mocked_list_directory.assert_called_with("basepath")
+        mocked_list_directory.assert_called_with(Path("basepath"))
         mocked_http_client_class.return_value.post_song.assert_called_with(
             [
                 {
@@ -186,7 +180,7 @@ class SongsFeederTestCase(TestCase):
         mocked_http_client_class.return_value.prune_artists.assert_called_with()
         mocked_http_client_class.return_value.prune_works.assert_called_with()
         mocked_subtitle_parse.assert_called_with(
-            Path("basepath") / "directory_2" / "song_2.ass"
+            Path("basepath/directory_2/song_2.ass")
         )
         mocked_subtitle_parse.return_value.get_lyrics.assert_called_with()
 
@@ -221,8 +215,8 @@ class SongsFeederTestCase(TestCase):
         """Test feed when a file has been renamed."""
         # mock content of server (old files)
         mocked_http_client_class.return_value.retrieve_songs.return_value = [
-            {"id": 0, "path": Path("directory_0") / "song.mp4"},
-            {"id": 1, "path": Path("directory_1") / "music.mp4"},
+            {"id": 0, "path": Path("directory_0/song.mp4")},
+            {"id": 1, "path": Path("directory_1/music.mp4")},
         ]
         mocked_http_client_class.return_value.prune_artists.return_value = 0
         mocked_http_client_class.return_value.prune_works.return_value = 0
@@ -230,8 +224,8 @@ class SongsFeederTestCase(TestCase):
         # mock content of file system (new files)
         # Simulate file music.mp4 renamed to musics.mp4
         mocked_list_directory.return_value = [
-            SongPaths(Path("directory_0") / "song.mp4"),
-            SongPaths(Path("directory_1") / "musics.mp4"),
+            SongPaths(Path("directory_0/song.mp4")),
+            SongPaths(Path("directory_1/musics.mp4")),
         ]
         mocked_metadata_parse.return_value.get_duration.return_value = timedelta(
             seconds=1
@@ -248,7 +242,7 @@ class SongsFeederTestCase(TestCase):
 
         # assert the mocked calls
         mocked_http_client_class.return_value.retrieve_songs.assert_called_with()
-        mocked_list_directory.assert_called_with("basepath")
+        mocked_list_directory.assert_called_with(Path("basepath"))
         mocked_http_client_class.return_value.put_song.assert_called_with(
             1,
             {
@@ -317,7 +311,7 @@ class SongsFeederTestCase(TestCase):
 
         # assert the mocked calls
         mocked_http_client_class.return_value.retrieve_songs.assert_called_with()
-        mocked_list_directory.assert_called_with("basepath")
+        mocked_list_directory.assert_called_with(Path("basepath"))
         mocked_http_client_class.return_value.put_song.assert_called_with(
             1,
             {
@@ -364,11 +358,9 @@ class SongsFeederTestCase(TestCase):
         """Test to feed without prune artists and works without songs."""
         # create the mocks
         mocked_http_client_class.return_value.retrieve_songs.return_value = [
-            {"id": 0, "path": Path("directory_0") / "song_0.mp4"}
+            {"id": 0, "path": Path("directory_0/song_0.mp4")}
         ]
-        mocked_list_directory.return_value = [
-            SongPaths(Path("directory_0") / "song_0.mp4")
-        ]
+        mocked_list_directory.return_value = [SongPaths(Path("directory_0/song_0.mp4"))]
         mocked_metadata_parse.return_value.get_duration.return_value = timedelta(
             seconds=1
         )
@@ -383,7 +375,7 @@ class SongsFeederTestCase(TestCase):
 
         # assert the mocked calls
         mocked_http_client_class.return_value.retrieve_songs.assert_called_with()
-        mocked_list_directory.assert_called_with("basepath")
+        mocked_list_directory.assert_called_with(Path("basepath"))
         mocked_http_client_class.return_value.post_song.assert_not_called()
         mocked_http_client_class.return_value.delete_song.assert_not_called()
         mocked_http_client_class.return_value.prune_artists.assert_not_called()
@@ -417,8 +409,8 @@ class SongsFeederTestCase(TestCase):
         mocked_http_client_class.return_value.prune_artists.return_value = 0
         mocked_http_client_class.return_value.prune_works.return_value = 0
         mocked_list_directory.return_value = [
-            SongPaths(Path("directory_0") / "song_0.mp4"),
-            SongPaths(Path("directory_1") / "song_1.mp4"),
+            SongPaths(Path("directory_0/song_0.mp4")),
+            SongPaths(Path("directory_1/song_1.mp4")),
         ]
         mocked_metadata_parse.return_value.get_duration.return_value = timedelta(
             seconds=1
@@ -435,7 +427,7 @@ class SongsFeederTestCase(TestCase):
 
         # assert the mocked calls
         mocked_http_client_class.return_value.retrieve_songs.assert_called_with()
-        mocked_list_directory.assert_called_with("basepath")
+        mocked_list_directory.assert_called_with(Path("basepath"))
         songs = [
             {
                 "title": "song_0",
@@ -509,9 +501,7 @@ class SongsFeederTestCase(TestCase):
         mocked_http_client_class.return_value.retrieve_songs.return_value = []
         mocked_http_client_class.return_value.prune_artists.return_value = 0
         mocked_http_client_class.return_value.prune_works.return_value = 0
-        mocked_list_directory.return_value = [
-            SongPaths(Path("directory_0") / "song_0.mp4")
-        ]
+        mocked_list_directory.return_value = [SongPaths(Path("directory_0/song_0.mp4"))]
         mocked_metadata_parse.return_value.get_duration.return_value = timedelta(
             seconds=1
         )
@@ -596,7 +586,7 @@ class SongsFeederTestCase(TestCase):
 
         # assert the mocked calls
         mocked_http_client_class.return_value.retrieve_songs.assert_called_with()
-        mocked_list_directory.assert_called_with("basepath")
+        mocked_list_directory.assert_called_with(Path("basepath"))
         mocked_http_client_class.return_value.post_song.assert_called_with(
             [
                 {

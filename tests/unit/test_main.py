@@ -1,9 +1,9 @@
 from argparse import ArgumentParser, Namespace
+from pathlib import Path
 from unittest import TestCase
 from unittest.mock import ANY, MagicMock, patch
 
 from dakara_base.config import Config
-from path import Path
 
 from dakara_feeder.__main__ import (
     create_config,
@@ -24,13 +24,19 @@ class CreateConfigTestCase(TestCase):
     def test_create_config(self, mocked_create_config_file, mocked_create_logger):
         """Test a normall config creation."""
         # call the function
-        with self.assertLogs("dakara_feeder.__main__") as logger:
-            create_config(Namespace(force=False))
+        with patch.multiple(
+            "dakara_feeder.__main__", __version__="0.0.0", __date__="1970-01-01"
+        ):
+            with self.assertLogs("dakara_feeder.__main__") as logger:
+                create_config(Namespace(force=False))
 
         # assert the logs
         self.assertListEqual(
             logger.output,
-            ["INFO:dakara_feeder.__main__:Please edit this file"],
+            [
+                "INFO:dakara_feeder.__main__:Dakara feeder 0.0.0 (1970-01-01)",
+                "INFO:dakara_feeder.__main__:Please edit this file",
+            ],
         )
 
         # assert the call
@@ -100,7 +106,7 @@ class FeedWorksTestCase(TestCase):
         feed_works(
             Namespace(
                 debug=False,
-                file=Path("path") / "to" / "file",
+                file=Path("path/to/file"),
                 progress=True,
                 update_only=False,
             )
@@ -114,7 +120,7 @@ class FeedWorksTestCase(TestCase):
         mocked_set_loglevel.assert_called_with(ANY)
         mocked_works_feeder_class.assert_called_with(
             ANY,
-            works_file_path=Path("path") / "to" / "file",
+            works_file_path=Path("path/to/file"),
             progress=True,
             update_only=False,
         )
@@ -142,9 +148,7 @@ class FeedTagsTestCase(TestCase):
     ):
         """Test to feed tags."""
         # call the function
-        feed_tags(
-            Namespace(debug=False, file=Path("path") / "to" / "file", progress=True)
-        )
+        feed_tags(Namespace(debug=False, file=Path("path/to/file"), progress=True))
 
         # assert the call
         mocked_create_logger.assert_called_with(wrap=True)
@@ -153,7 +157,7 @@ class FeedTagsTestCase(TestCase):
         mocked_set_debug.assert_called_with(False)
         mocked_set_loglevel.assert_called_with(ANY)
         mocked_tags_feeder_class.assert_called_with(
-            ANY, tags_file_path=Path("path") / "to" / "file", progress=True
+            ANY, tags_file_path=Path("path/to/file"), progress=True
         )
         mocked_tags_feeder_class.return_value.load.assert_called_with()
         mocked_tags_feeder_class.return_value.feed.assert_called_with()
@@ -182,7 +186,7 @@ class FeedWorkTypesTestCase(TestCase):
         feed_work_types(
             Namespace(
                 debug=False,
-                file=Path("path") / "to" / "file",
+                file=Path("path/to/file"),
                 progress=True,
             )
         )
@@ -194,7 +198,7 @@ class FeedWorkTypesTestCase(TestCase):
         mocked_set_debug.assert_called_with(False)
         mocked_set_loglevel.assert_called_with(ANY)
         mocked_work_types_feeder_class.assert_called_with(
-            ANY, work_types_file_path=Path("path") / "to" / "file", progress=True
+            ANY, work_types_file_path=Path("path/to/file"), progress=True
         )
         mocked_work_types_feeder_class.return_value.load.assert_called_with()
         mocked_work_types_feeder_class.return_value.feed.assert_called_with()

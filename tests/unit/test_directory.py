@@ -1,13 +1,9 @@
+from importlib.resources import path
+from pathlib import Path
+from shutil import copy
+from tempfile import TemporaryDirectory
 from unittest import TestCase
 from unittest.mock import patch
-
-from path import Path, TempDir
-
-try:
-    from importlib.resources import path
-
-except ImportError:
-    from importlib_resources import path
 
 from dakara_feeder.directory import (
     SongPaths,
@@ -21,12 +17,14 @@ class ListDirectoryTestCase(TestCase):
     """Test the directory lister."""
 
     @patch("dakara_feeder.directory.get_main_type", autoset=True)
-    @patch.object(Path, "walkfiles", autoset=True)
-    def test_list_directory(self, mocked_walkfiles, mocked_get_main_type):
+    @patch.object(Path, "is_file", autoset=True)
+    @patch.object(Path, "rglob", autoset=True)
+    def test_list_directory(self, mocked_rglob, mocked_is_file, mocked_get_main_type):
         """Test to list a directory."""
         # mock directory structure
-        mocked_walkfiles.return_value = (
-            item.normpath()
+        mocked_is_file.return_value = True
+        mocked_rglob.return_value = (
+            item
             for item in [
                 Path("directory/file0.mkv"),
                 Path("directory/file1.mkv"),
@@ -54,10 +52,10 @@ class ListDirectoryTestCase(TestCase):
                     audio=Path("file1.ogg"),
                     subtitle=Path("file1.ass"),
                 ),
-                SongPaths(Path("subdirectory") / "file2.mkv"),
+                SongPaths(Path("subdirectory/file2.mkv")),
                 SongPaths(
-                    Path("subdirectory") / "file3.mkv",
-                    subtitle=Path("subdirectory") / "file3.ass",
+                    Path("subdirectory/file3.mkv"),
+                    subtitle=Path("subdirectory/file3.ass"),
                 ),
             ],
             listing,
@@ -74,12 +72,16 @@ class ListDirectoryTestCase(TestCase):
         )
 
     @patch("dakara_feeder.directory.get_main_type", autoset=True)
-    @patch.object(Path, "walkfiles", autoset=True)
-    def test_list_directory_same_stem(self, mocked_walkfiles, mocked_get_main_type):
+    @patch.object(Path, "is_file", autoset=True)
+    @patch.object(Path, "rglob", autoset=True)
+    def test_list_directory_same_stem(
+        self, mocked_rglob, mocked_is_file, mocked_get_main_type
+    ):
         """Test case when files with the same name exists in different directories."""
         # mock directory structure
-        mocked_walkfiles.return_value = (
-            item.normpath()
+        mocked_is_file.return_value = True
+        mocked_rglob.return_value = (
+            item
             for item in [
                 Path("directory/file0.mkv"),
                 Path("directory/file0.ass"),
@@ -99,8 +101,8 @@ class ListDirectoryTestCase(TestCase):
             [
                 SongPaths(Path("file0.mkv"), subtitle=Path("file0.ass")),
                 SongPaths(
-                    Path("subdirectory") / "file0.mkv",
-                    subtitle=Path("subdirectory") / "file0.ass",
+                    Path("subdirectory/file0.mkv"),
+                    subtitle=Path("subdirectory/file0.ass"),
                 ),
             ],
             listing,
@@ -117,12 +119,16 @@ class ListDirectoryTestCase(TestCase):
         )
 
     @patch("dakara_feeder.directory.get_main_type", autoset=True)
-    @patch.object(Path, "walkfiles", autoset=True)
-    def test_list_dot_in_filename(self, mocked_walkfiles, mocked_get_main_type):
+    @patch.object(Path, "is_file", autoset=True)
+    @patch.object(Path, "rglob", autoset=True)
+    def test_list_dot_in_filename(
+        self, mocked_rglob, mocked_is_file, mocked_get_main_type
+    ):
         """Test case with a dot in filename."""
         # mock directory structure
-        mocked_walkfiles.return_value = (
-            item.normpath()
+        mocked_is_file.return_value = True
+        mocked_rglob.return_value = (
+            item
             for item in [
                 Path("directory/file0.ass"),
                 Path("directory/file0.extra.ass"),
@@ -159,13 +165,13 @@ class ListDirectoryIntegrationTestCase(TestCase):
     def test_list_directory(self):
         """Test to list a directory using test ressource dummy files."""
         # call the function
-        with TempDir() as temp:
+        with TemporaryDirectory() as temp:
             # copy required files
             with path("tests.resources.media", "dummy.ass") as file:
-                Path(file).copy(temp)
+                copy(file, temp)
 
             with path("tests.resources.media", "dummy.mkv") as file:
-                Path(file).copy(temp)
+                copy(file, temp)
 
             with self.assertLogs("dakara_feeder.directory", "DEBUG"):
                 listing = list_directory(Path(temp))
@@ -183,38 +189,38 @@ class GetMainTypeTestCase(TestCase):
     def test_video(self):
         """Test the common video files."""
         with path("tests.resources.filetype", "file.avi") as file:
-            self.assertEqual(get_main_type(Path(file)), "video")
+            self.assertEqual(get_main_type(file), "video")
 
         with path("tests.resources.filetype", "file.mkv") as file:
-            self.assertEqual(get_main_type(Path(file)), "video")
+            self.assertEqual(get_main_type(file), "video")
 
         with path("tests.resources.filetype", "file_upper.MKV") as file:
-            self.assertEqual(get_main_type(Path(file)), "video")
+            self.assertEqual(get_main_type(file), "video")
 
         with path("tests.resources.filetype", "file.mp4") as file:
-            self.assertEqual(get_main_type(Path(file)), "video")
+            self.assertEqual(get_main_type(file), "video")
 
     def test_audio(self):
         """Test the common audio files."""
         with path("tests.resources.filetype", "file.flac") as file:
-            self.assertEqual(get_main_type(Path(file)), "audio")
+            self.assertEqual(get_main_type(file), "audio")
 
         with path("tests.resources.filetype", "file.mp3") as file:
-            self.assertEqual(get_main_type(Path(file)), "audio")
+            self.assertEqual(get_main_type(file), "audio")
 
         with path("tests.resources.filetype", "file.ogg") as file:
-            self.assertEqual(get_main_type(Path(file)), "audio")
+            self.assertEqual(get_main_type(file), "audio")
 
     def test_subtitle(self):
         """Test the common subtitles files."""
         with path("tests.resources.filetype", "file.ass") as file:
-            self.assertIsNone(get_main_type(Path(file)))
+            self.assertIsNone(get_main_type(file))
 
         with path("tests.resources.filetype", "file.ssa") as file:
-            self.assertIsNone(get_main_type(Path(file)))
+            self.assertIsNone(get_main_type(file))
 
         with path("tests.resources.filetype", "file.srt") as file:
-            self.assertIsNone(get_main_type(Path(file)))
+            self.assertIsNone(get_main_type(file))
 
 
 @patch("dakara_feeder.directory.get_main_type", autoset=True)
@@ -346,7 +352,7 @@ def get_main_type_mock(path):
         "audio" if file extension is "ogg" or "flac",
         None otherwise.
     """
-    ext = path.ext
+    ext = path.suffix
 
     if ext in [".mp4", ".mkv"]:
         return "video"
