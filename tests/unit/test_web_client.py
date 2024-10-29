@@ -29,7 +29,7 @@ class HTTPClientDakaraTestCase(TestCase):
             "address": self.address,
         }
 
-    @patch.object(web_client.HTTPClientDakara, "get", autoset=True)
+    @patch.object(web_client.HTTPClientDakara, "get", autospec=True)
     def test_retrieve_songs(self, mocked_get):
         """Test to obtain the list of song paths."""
         # create the mock
@@ -56,9 +56,9 @@ class HTTPClientDakaraTestCase(TestCase):
         )
 
         # assert the mock
-        mocked_get.assert_called_with("library/songs/retrieve/")
+        mocked_get.assert_called_with(http_client, "library/songs/retrieve/")
 
-    @patch.object(web_client.HTTPClientDakara, "post", autoset=True)
+    @patch.object(web_client.HTTPClientDakara, "post", autospec=True)
     def test_post_song(self, mocked_post):
         """Test to create one song on the server."""
         # create song
@@ -78,9 +78,9 @@ class HTTPClientDakaraTestCase(TestCase):
         http_client.post_song(song)
 
         # assert the mock
-        mocked_post.assert_called_with("library/songs/", json=song)
+        mocked_post.assert_called_with(http_client, "library/songs/", json=song)
 
-    @patch.object(web_client.HTTPClientDakara, "put", autoset=True)
+    @patch.object(web_client.HTTPClientDakara, "put", autospec=True)
     def test_put_song(self, mocked_put):
         """Test to update one song on the server."""
         # create song ID
@@ -103,9 +103,9 @@ class HTTPClientDakaraTestCase(TestCase):
         http_client.put_song(song_id, song)
 
         # assert the mock
-        mocked_put.assert_called_with("library/songs/42/", json=song)
+        mocked_put.assert_called_with(http_client, "library/songs/42/", json=song)
 
-    @patch.object(web_client.HTTPClientDakara, "delete", autoset=True)
+    @patch.object(web_client.HTTPClientDakara, "delete", autospec=True)
     def test_delete_song(self, mocked_delete):
         """Test to delete one song on the server."""
         # create song ID
@@ -120,9 +120,9 @@ class HTTPClientDakaraTestCase(TestCase):
         http_client.delete_song(song_id)
 
         # assert the mock
-        mocked_delete.assert_called_with("library/songs/42/")
+        mocked_delete.assert_called_with(http_client, "library/songs/42/")
 
-    @patch.object(web_client.HTTPClientDakara, "delete", autoset=True)
+    @patch.object(web_client.HTTPClientDakara, "delete", autospec=True)
     def test_prune_artists(self, mocked_delete):
         """Test to prune artists."""
         # mock objects
@@ -140,9 +140,9 @@ class HTTPClientDakaraTestCase(TestCase):
         self.assertEqual(deleted_count, 2)
 
         # assert the mock
-        mocked_delete.assert_called_with("library/artists/prune/")
+        mocked_delete.assert_called_with(http_client, "library/artists/prune/")
 
-    @patch.object(web_client.HTTPClientDakara, "get", autoset=True)
+    @patch.object(web_client.HTTPClientDakara, "get", autospec=True)
     def test_retrieve_works(self, mocked_get):
         """Test to obtain the list of works."""
         # create the mock
@@ -189,9 +189,9 @@ class HTTPClientDakaraTestCase(TestCase):
         )
 
         # assert the mock
-        mocked_get.assert_called_with("library/works/retrieve/")
+        mocked_get.assert_called_with(http_client, "library/works/retrieve/")
 
-    @patch.object(web_client.HTTPClientDakara, "post", autoset=True)
+    @patch.object(web_client.HTTPClientDakara, "post", autospec=True)
     def test_post_work(self, mocked_post):
         """Test to create one work on the server."""
         # create work
@@ -218,9 +218,9 @@ class HTTPClientDakaraTestCase(TestCase):
         http_client.post_work(work)
 
         # assert the mock
-        mocked_post.assert_called_with("library/works/", json=work)
+        mocked_post.assert_called_with(http_client, "library/works/", json=work)
 
-    @patch.object(web_client.HTTPClientDakara, "put", autoset=True)
+    @patch.object(web_client.HTTPClientDakara, "put", autospec=True)
     def test_put_work(self, mocked_put):
         """Test to update one work on the server."""
         # create work ID
@@ -250,9 +250,9 @@ class HTTPClientDakaraTestCase(TestCase):
         http_client.put_work(work_id, work)
 
         # assert the mock
-        mocked_put.assert_called_with("library/works/42/", json=work)
+        mocked_put.assert_called_with(http_client, "library/works/42/", json=work)
 
-    @patch.object(web_client.HTTPClientDakara, "delete", autoset=True)
+    @patch.object(web_client.HTTPClientDakara, "delete", autospec=True)
     def test_prune_works(self, mocked_delete):
         """Test to prune works."""
         # mock objects
@@ -270,9 +270,9 @@ class HTTPClientDakaraTestCase(TestCase):
         self.assertEqual(deleted_count, 2)
 
         # assert the mock
-        mocked_delete.assert_called_with("library/works/prune/")
+        mocked_delete.assert_called_with(http_client, "library/works/prune/")
 
-    @patch.object(web_client.HTTPClientDakara, "post", autoset=True)
+    @patch.object(web_client.HTTPClientDakara, "post", autospec=True)
     def test_post_tag(self, mocked_post):
         """Test to create tag."""
         # create the object
@@ -287,9 +287,11 @@ class HTTPClientDakaraTestCase(TestCase):
         http_client.post_tag(tag)
 
         # assert the call
-        mocked_post.assert_called_with("library/song-tags/", tag, function_on_error=ANY)
+        mocked_post.assert_called_with(
+            http_client, "library/song-tags/", tag, function_on_error=ANY
+        )
 
-    @patch("dakara_base.http_client.requests.post", autoset=True)
+    @patch("dakara_base.http_client.requests.post", autospec=True)
     def test_post_tag_error_already_exists(self, mocked_post):
         """Test to create tag that already exists."""
         # create the mock
@@ -316,7 +318,7 @@ class HTTPClientDakaraTestCase(TestCase):
             self.url + "library/song-tags/", tag, headers=ANY
         )
 
-    @patch("dakara_base.http_client.requests.post", autoset=True)
+    @patch("dakara_base.http_client.requests.post", autospec=True)
     def test_post_tag_error_other(self, mocked_post):
         """Test an unknown problem when creating a tag."""
         # create the mock
@@ -345,7 +347,7 @@ class HTTPClientDakaraTestCase(TestCase):
             "Error 999 when communicating with the server: error message",
         )
 
-    @patch.object(web_client.HTTPClientDakara, "post", autoset=True)
+    @patch.object(web_client.HTTPClientDakara, "post", autospec=True)
     def test_post_work_type(self, mocked_post):
         """Test to create work type."""
         # create the object
@@ -361,10 +363,10 @@ class HTTPClientDakaraTestCase(TestCase):
 
         # assert the call
         mocked_post.assert_called_with(
-            "library/work-types/", work_type, function_on_error=ANY
+            http_client, "library/work-types/", work_type, function_on_error=ANY
         )
 
-    @patch("dakara_base.http_client.requests.post", autoset=True)
+    @patch("dakara_base.http_client.requests.post", autospec=True)
     def test_post_work_type_error_already_exists(self, mocked_post):
         """Test to create work type that already exists."""
         # create the mock
@@ -391,7 +393,7 @@ class HTTPClientDakaraTestCase(TestCase):
             self.url + "library/work-types/", work_type, headers=ANY
         )
 
-    @patch("dakara_base.http_client.requests.post", autoset=True)
+    @patch("dakara_base.http_client.requests.post", autospec=True)
     def test_post_work_type_error_other(self, mocked_post):
         """Test an unknown problem when creating a work type."""
         # create the mock

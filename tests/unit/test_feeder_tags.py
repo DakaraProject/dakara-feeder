@@ -4,7 +4,7 @@ from unittest.mock import patch
 from dakara_feeder.feeder.tags import TagAlreadyExistsError, TagInvalidError, TagsFeeder
 
 
-@patch("dakara_feeder.feeder.tags.HTTPClientDakara", autoset=True)
+@patch("dakara_feeder.feeder.tags.HTTPClientDakara", autospec=True)
 class TagsFeederTestCase(TestCase):
     """Test the TestCase class."""
 
@@ -23,7 +23,7 @@ class TagsFeederTestCase(TestCase):
         # assert the call
         mocked_http_client_class.return_value.authenticate.assert_called_with()
 
-    @patch("dakara_feeder.feeder.tags.get_yaml_file_content", autoset=True)
+    @patch("dakara_feeder.feeder.tags.get_yaml_file_content", autospec=True)
     def test_feed(self, mocked_get_yaml_file_content, mocked_http_client_class):
         """Test to feed tags."""
         # create the mock
@@ -39,7 +39,7 @@ class TagsFeederTestCase(TestCase):
         # assert the call
         mocked_http_client_class.return_value.post_tag.assert_called_with(tag)
 
-    @patch("dakara_feeder.feeder.tags.get_yaml_file_content", autoset=True)
+    @patch("dakara_feeder.feeder.tags.get_yaml_file_content", autospec=True)
     def test_feed_error_no_name(
         self, mocked_get_yaml_file_content, mocked_http_client_class
     ):
@@ -55,7 +55,7 @@ class TagsFeederTestCase(TestCase):
         with self.assertRaisesRegex(TagInvalidError, "Tag #0 must have a name"):
             feeder.feed()
 
-    @patch("dakara_feeder.feeder.tags.get_yaml_file_content", autoset=True)
+    @patch("dakara_feeder.feeder.tags.get_yaml_file_content", autospec=True)
     def test_feed_error_no_hue(
         self, mocked_get_yaml_file_content, mocked_http_client_class
     ):
@@ -71,7 +71,7 @@ class TagsFeederTestCase(TestCase):
         with self.assertRaisesRegex(TagInvalidError, "Tag #0 must have a color hue"):
             feeder.feed()
 
-    @patch("dakara_feeder.feeder.tags.get_yaml_file_content", autoset=True)
+    @patch("dakara_feeder.feeder.tags.get_yaml_file_content", autospec=True)
     def test_feed_error_tag_exists(
         self, mocked_get_yaml_file_content, mocked_http_client_class
     ):

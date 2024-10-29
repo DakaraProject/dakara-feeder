@@ -16,9 +16,9 @@ from dakara_feeder.directory import (
 class ListDirectoryTestCase(TestCase):
     """Test the directory lister."""
 
-    @patch("dakara_feeder.directory.get_main_type", autoset=True)
-    @patch.object(Path, "is_file", autoset=True)
-    @patch.object(Path, "rglob", autoset=True)
+    @patch("dakara_feeder.directory.get_main_type", autospec=True)
+    @patch.object(Path, "is_file", autospec=True)
+    @patch.object(Path, "rglob", autospec=True)
     def test_list_directory(self, mocked_rglob, mocked_is_file, mocked_get_main_type):
         """Test to list a directory."""
         # mock directory structure
@@ -71,9 +71,9 @@ class ListDirectoryTestCase(TestCase):
             ],
         )
 
-    @patch("dakara_feeder.directory.get_main_type", autoset=True)
-    @patch.object(Path, "is_file", autoset=True)
-    @patch.object(Path, "rglob", autoset=True)
+    @patch("dakara_feeder.directory.get_main_type", autospec=True)
+    @patch.object(Path, "is_file", autospec=True)
+    @patch.object(Path, "rglob", autospec=True)
     def test_list_directory_same_stem(
         self, mocked_rglob, mocked_is_file, mocked_get_main_type
     ):
@@ -118,9 +118,9 @@ class ListDirectoryTestCase(TestCase):
             ],
         )
 
-    @patch("dakara_feeder.directory.get_main_type", autoset=True)
-    @patch.object(Path, "is_file", autoset=True)
-    @patch.object(Path, "rglob", autoset=True)
+    @patch("dakara_feeder.directory.get_main_type", autospec=True)
+    @patch.object(Path, "is_file", autospec=True)
+    @patch.object(Path, "rglob", autospec=True)
     def test_list_dot_in_filename(
         self, mocked_rglob, mocked_is_file, mocked_get_main_type
     ):
@@ -223,7 +223,7 @@ class GetMainTypeTestCase(TestCase):
             self.assertIsNone(get_main_type(file))
 
 
-@patch("dakara_feeder.directory.get_main_type", autoset=True)
+@patch("dakara_feeder.directory.get_main_type", autospec=True)
 class GroupByTypeTestCase(TestCase):
     """Test the group_by_type function."""
 

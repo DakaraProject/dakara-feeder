@@ -12,8 +12,8 @@ from dakara_feeder.subtitle.parsing import Pysubs2SubtitleParser, SubtitleParseE
 class BaseSongTestCase(TestCase):
     """Test the BaseSong class."""
 
-    @patch.object(Pysubs2SubtitleParser, "parse", autoset=True)
-    @patch.object(FFProbeMetadataParser, "parse", autoset=True)
+    @patch.object(Pysubs2SubtitleParser, "parse", autospec=True)
+    @patch.object(FFProbeMetadataParser, "parse", autospec=True)
     def test_subtitle_parser_error(self, mocked_metadata_parse, mocked_subtitle_parse):
         """Test an invalid subtitle file raises no exception but logs error."""
         # setup mocks
@@ -42,8 +42,8 @@ class BaseSongTestCase(TestCase):
             logger.output, ["ERROR:dakara_feeder.song:Lyrics not parsed: invalid"]
         )
 
-    @patch.object(Pysubs2SubtitleParser, "parse", autoset=True)
-    @patch.object(FFProbeMetadataParser, "parse", autoset=True)
+    @patch.object(Pysubs2SubtitleParser, "parse", autospec=True)
+    @patch.object(FFProbeMetadataParser, "parse", autospec=True)
     def test_metadata_error(self, mocked_metadata_parse, mocked_subtitle_parse):
         """Test an invalid video file raises no exception but logs error."""
         # setup mocks

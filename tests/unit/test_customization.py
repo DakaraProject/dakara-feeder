@@ -217,7 +217,7 @@ class SplitPathObjectTestCase(TestCase):
 
 
 class DirInPathTestCase(TestCase):
-    @patch("dakara_feeder.customization.sys")
+    @patch("dakara_feeder.customization.sys", autospec=True)
     def test_normal(self, mocked_sys):
         """Test the helper with no alteration of the path."""
         # setup mocks
@@ -233,7 +233,7 @@ class DirInPathTestCase(TestCase):
         # assert the mock
         self.assertListEqual(mocked_sys.path, ["some/directory"])
 
-    @patch("dakara_feeder.customization.sys")
+    @patch("dakara_feeder.customization.sys", autospec=True)
     def test_alteration(self, mocked_sys):
         """Test the helper with alteration of the path."""
         # setup mocks

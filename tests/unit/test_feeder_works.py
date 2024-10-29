@@ -5,7 +5,7 @@ from unittest.mock import call, patch
 from dakara_feeder.feeder.works import WorkInvalidError, WorksFeeder, WorksInvalidError
 
 
-@patch("dakara_feeder.feeder.works.HTTPClientDakara", autoset=True)
+@patch("dakara_feeder.feeder.works.HTTPClientDakara", autospec=True)
 class WorksFeederTestCase(TestCase):
     """Test the feeder class."""
 
@@ -153,7 +153,7 @@ class WorksFeederTestCase(TestCase):
             with self.assertLogs("dakara_base.progress_bar"):
                 feeder.check(content)
 
-    @patch("dakara_feeder.feeder.works.get_json_file_content")
+    @patch("dakara_feeder.feeder.works.get_json_file_content", autospec=True)
     def test_feed(self, mocked_get_json_file_content, mocked_http_client_class):
         """Test to feed."""
         mocked_http_client_class.return_value.retrieve_works.return_value = [
@@ -254,7 +254,7 @@ class WorksFeederTestCase(TestCase):
             ],
         )
 
-    @patch("dakara_feeder.feeder.works.get_json_file_content")
+    @patch("dakara_feeder.feeder.works.get_json_file_content", autospec=True)
     def test_feed_update_only(
         self, mocked_get_json_file_content, mocked_http_client_class
     ):
@@ -304,7 +304,7 @@ class WorksFeederTestCase(TestCase):
         # assert the mocks
         mocked_http_client_class.return_value.post_work.assert_not_called()
 
-    @patch("dakara_feeder.feeder.works.get_json_file_content")
+    @patch("dakara_feeder.feeder.works.get_json_file_content", autospec=True)
     def test_feed_case(self, mocked_get_json_file_content, mocked_http_client_class):
         """Test to feed with case differences."""
         mocked_http_client_class.return_value.retrieve_works.return_value = [

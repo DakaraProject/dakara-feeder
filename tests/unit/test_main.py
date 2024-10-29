@@ -16,8 +16,8 @@ from dakara_feeder.__main__ import (
 
 
 @patch("dakara_feeder.__main__.CONFIG_FILE", "feeder.yaml")
-@patch("dakara_feeder.__main__.create_logger")
-@patch("dakara_feeder.__main__.create_config_file")
+@patch("dakara_feeder.__main__.create_logger", autospec=True)
+@patch("dakara_feeder.__main__.create_config_file", autospec=True)
 class CreateConfigTestCase(TestCase):
     """Test the create-config subcommand."""
 
@@ -49,11 +49,11 @@ class CreateConfigTestCase(TestCase):
 
 
 @patch("dakara_feeder.__main__.SongsFeeder", autospec=True)
-@patch("dakara_feeder.__main__.set_loglevel")
-@patch.object(Config, "set_debug")
-@patch.object(Config, "check_mandatory_keys")
-@patch.object(Config, "load_file")
-@patch("dakara_feeder.__main__.create_logger")
+@patch("dakara_feeder.__main__.set_loglevel", autospec=True)
+@patch.object(Config, "set_debug", autospec=True)
+@patch.object(Config, "check_mandatory_keys", autospec=True)
+@patch.object(Config, "load_file", autospec=True)
+@patch("dakara_feeder.__main__.create_logger", autospec=True)
 class FeedSongsTestCase(TestCase):
     """Test the feed songs subcommand."""
 
@@ -72,10 +72,10 @@ class FeedSongsTestCase(TestCase):
 
         # assert the call
         mocked_create_logger.assert_called_with(wrap=True)
-        mocked_load_file.assert_called_with(ANY)
-        mocked_check_mandatory_keys.assert_called_with(["kara_folder", "server"])
-        mocked_set_debug.assert_called_with(False)
-        mocked_set_loglevel.assert_called_with(ANY)
+        mocked_load_file.assert_called_with({}, ANY)
+        mocked_check_mandatory_keys.assert_called_with({}, ["kara_folder", "server"])
+        mocked_set_debug.assert_called_with({}, False)
+        mocked_set_loglevel.assert_called_with({})
         mocked_songs_feeder_class.assert_called_with(
             ANY, force_update=False, prune=True, progress=True
         )
@@ -84,11 +84,11 @@ class FeedSongsTestCase(TestCase):
 
 
 @patch("dakara_feeder.__main__.WorksFeeder", autospec=True)
-@patch("dakara_feeder.__main__.set_loglevel")
-@patch.object(Config, "set_debug")
-@patch.object(Config, "check_mandatory_keys")
-@patch.object(Config, "load_file")
-@patch("dakara_feeder.__main__.create_logger")
+@patch("dakara_feeder.__main__.set_loglevel", autospec=True)
+@patch.object(Config, "set_debug", autospec=True)
+@patch.object(Config, "check_mandatory_keys", autospec=True)
+@patch.object(Config, "load_file", autospec=True)
+@patch("dakara_feeder.__main__.create_logger", autospec=True)
 class FeedWorksTestCase(TestCase):
     """Test the feed works subcommand."""
 
@@ -114,10 +114,10 @@ class FeedWorksTestCase(TestCase):
 
         # assert the call
         mocked_create_logger.assert_called_with(wrap=True)
-        mocked_load_file.assert_called_with(ANY)
-        mocked_check_mandatory_keys.assert_called_with(["server"])
-        mocked_set_debug.assert_called_with(False)
-        mocked_set_loglevel.assert_called_with(ANY)
+        mocked_load_file.assert_called_with({}, ANY)
+        mocked_check_mandatory_keys.assert_called_with({}, ["server"])
+        mocked_set_debug.assert_called_with({}, False)
+        mocked_set_loglevel.assert_called_with({})
         mocked_works_feeder_class.assert_called_with(
             ANY,
             works_file_path=Path("path/to/file"),
@@ -129,11 +129,11 @@ class FeedWorksTestCase(TestCase):
 
 
 @patch("dakara_feeder.__main__.TagsFeeder", autospec=True)
-@patch("dakara_feeder.__main__.set_loglevel")
-@patch.object(Config, "set_debug")
-@patch.object(Config, "check_mandatory_keys")
-@patch.object(Config, "load_file")
-@patch("dakara_feeder.__main__.create_logger")
+@patch("dakara_feeder.__main__.set_loglevel", autospec=True)
+@patch.object(Config, "set_debug", autospec=True)
+@patch.object(Config, "check_mandatory_keys", autospec=True)
+@patch.object(Config, "load_file", autospec=True)
+@patch("dakara_feeder.__main__.create_logger", autospec=True)
 class FeedTagsTestCase(TestCase):
     """Test the feed tags subcommand."""
 
@@ -152,10 +152,10 @@ class FeedTagsTestCase(TestCase):
 
         # assert the call
         mocked_create_logger.assert_called_with(wrap=True)
-        mocked_load_file.assert_called_with(ANY)
-        mocked_check_mandatory_keys.assert_called_with(["server"])
-        mocked_set_debug.assert_called_with(False)
-        mocked_set_loglevel.assert_called_with(ANY)
+        mocked_load_file.assert_called_with({}, ANY)
+        mocked_check_mandatory_keys.assert_called_with({}, ["server"])
+        mocked_set_debug.assert_called_with({}, False)
+        mocked_set_loglevel.assert_called_with({})
         mocked_tags_feeder_class.assert_called_with(
             ANY, tags_file_path=Path("path/to/file"), progress=True
         )
@@ -164,11 +164,11 @@ class FeedTagsTestCase(TestCase):
 
 
 @patch("dakara_feeder.__main__.WorkTypesFeeder", autospec=True)
-@patch("dakara_feeder.__main__.set_loglevel")
-@patch.object(Config, "set_debug")
-@patch.object(Config, "check_mandatory_keys")
-@patch.object(Config, "load_file")
-@patch("dakara_feeder.__main__.create_logger")
+@patch("dakara_feeder.__main__.set_loglevel", autospec=True)
+@patch.object(Config, "set_debug", autospec=True)
+@patch.object(Config, "check_mandatory_keys", autospec=True)
+@patch.object(Config, "load_file", autospec=True)
+@patch("dakara_feeder.__main__.create_logger", autospec=True)
 class FeedWorkTypesTestCase(TestCase):
     """Test the feed work types subcommand."""
 
@@ -193,10 +193,10 @@ class FeedWorkTypesTestCase(TestCase):
 
         # assert the call
         mocked_create_logger.assert_called_with(wrap=True)
-        mocked_load_file.assert_called_with(ANY)
-        mocked_check_mandatory_keys.assert_called_with(["server"])
-        mocked_set_debug.assert_called_with(False)
-        mocked_set_loglevel.assert_called_with(ANY)
+        mocked_load_file.assert_called_with({}, ANY)
+        mocked_check_mandatory_keys.assert_called_with({}, ["server"])
+        mocked_set_debug.assert_called_with({}, False)
+        mocked_set_loglevel.assert_called_with({})
         mocked_work_types_feeder_class.assert_called_with(
             ANY, work_types_file_path=Path("path/to/file"), progress=True
         )
@@ -204,8 +204,8 @@ class FeedWorkTypesTestCase(TestCase):
         mocked_work_types_feeder_class.return_value.feed.assert_called_with()
 
 
-@patch("dakara_feeder.__main__.sys.exit")
-@patch.object(ArgumentParser, "parse_args")
+@patch("dakara_feeder.__main__.sys.exit", autospec=True)
+@patch.object(ArgumentParser, "parse_args", autospec=True)
 class MainTestCase(TestCase):
     """Test the main action."""
 

@@ -12,7 +12,7 @@ from dakara_feeder.json import (
 )
 
 
-@patch.object(Path, "read_text", autoset=True)
+@patch.object(Path, "read_text", autospec=True)
 class GetJsonFileContentTestCase(TestCase):
     """Test the get_json_file_content function."""
 
@@ -29,7 +29,7 @@ class GetJsonFileContentTestCase(TestCase):
         self.assertDictEqual(content, content_parsed)
 
         # assert the call
-        mocked_read_text.assert_called_with()
+        mocked_read_text.assert_called_with(Path("path/to/file"))
 
     def test_get_error_not_found(self, mocked_read_text):
         """Test to get a JSON file that does not exist."""
@@ -43,7 +43,7 @@ class GetJsonFileContentTestCase(TestCase):
         ):
             get_json_file_content(Path("path/to/file"))
 
-    @patch("dakara_feeder.json.json.load")
+    @patch("dakara_feeder.json.json.load", autospec=True)
     def test_get_error_invalid(self, mocked_load, mocked_read_text):
         """Test to get an invalid JSON file."""
         # create the mock
@@ -69,7 +69,7 @@ class GetJsonFileContentTestCase(TestCase):
         self.assertDictEqual(content["tags"], content_parsed)
 
         # assert the call
-        mocked_read_text.assert_called_with()
+        mocked_read_text.assert_called_with(Path("path/to/file"))
 
     def test_get_key_error(self, mocked_read_text):
         """Test to get a invalid key of a JSON file."""
