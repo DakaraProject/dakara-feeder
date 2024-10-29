@@ -13,7 +13,7 @@ from dakara_feeder.yaml import (
 )
 
 
-@patch.object(Path, "read_text", autoset=True)
+@patch.object(Path, "read_text", autospec=True)
 class GetYamlFileContentTestCase(TestCase):
     """Test the get_yaml_file_content function."""
 
@@ -30,7 +30,7 @@ class GetYamlFileContentTestCase(TestCase):
         self.assertDictEqual(content, content_parsed)
 
         # assert the call
-        mocked_read_text.assert_called_with()
+        mocked_read_text.assert_called_with(Path("path/to/file"))
 
     def test_get_error_not_found(self, mocked_read_text):
         """Test to get a YAML file that does not exist."""
@@ -44,7 +44,7 @@ class GetYamlFileContentTestCase(TestCase):
         ):
             get_yaml_file_content(Path("path/to/file"))
 
-    @patch("dakara_feeder.yaml.yaml.safe_load")
+    @patch("dakara_feeder.yaml.yaml.safe_load", autospec=True)
     def test_get_error_invalid(self, mocked_safe_load, mocked_read_text):
         """Test to get an invalid YAML file."""
         # create the mock
@@ -74,7 +74,7 @@ class GetYamlFileContentTestCase(TestCase):
         self.assertDictEqual(content["tags"], content_parsed)
 
         # assert the call
-        mocked_read_text.assert_called_with()
+        mocked_read_text.assert_called_with(Path("path/to/file"))
 
     def test_get_key_error(self, mocked_read_text):
         """Test to get a invalid key of a YAML file."""

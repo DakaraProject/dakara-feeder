@@ -8,7 +8,7 @@ from dakara_feeder.feeder.work_types import (
 )
 
 
-@patch("dakara_feeder.feeder.work_types.HTTPClientDakara", autoset=True)
+@patch("dakara_feeder.feeder.work_types.HTTPClientDakara", autospec=True)
 class WorkTypesFeederTestCase(TestCase):
     """Test the WorkTypesFeeder class."""
 
@@ -27,7 +27,7 @@ class WorkTypesFeederTestCase(TestCase):
         # assert the call
         mocked_http_client_class.return_value.authenticate.assert_called_with()
 
-    @patch("dakara_feeder.feeder.work_types.get_yaml_file_content", autoset=True)
+    @patch("dakara_feeder.feeder.work_types.get_yaml_file_content", autospec=True)
     def test_feed(self, mocked_get_yaml_file_content, mocked_http_client_class):
         """Test to feed work types."""
         # create the mock
@@ -49,7 +49,7 @@ class WorkTypesFeederTestCase(TestCase):
             work_type
         )
 
-    @patch("dakara_feeder.feeder.work_types.get_yaml_file_content", autoset=True)
+    @patch("dakara_feeder.feeder.work_types.get_yaml_file_content", autospec=True)
     def test_feed_error_no_query_name(
         self, mocked_get_yaml_file_content, mocked_http_client_class
     ):
@@ -71,7 +71,7 @@ class WorkTypesFeederTestCase(TestCase):
         ):
             feeder.feed()
 
-    @patch("dakara_feeder.feeder.work_types.get_yaml_file_content", autoset=True)
+    @patch("dakara_feeder.feeder.work_types.get_yaml_file_content", autospec=True)
     def test_feed_error_no_name(
         self, mocked_get_yaml_file_content, mocked_http_client_class
     ):
@@ -93,7 +93,7 @@ class WorkTypesFeederTestCase(TestCase):
         ):
             feeder.feed()
 
-    @patch("dakara_feeder.feeder.work_types.get_yaml_file_content", autoset=True)
+    @patch("dakara_feeder.feeder.work_types.get_yaml_file_content", autospec=True)
     def test_feed_error_no_name_plural(
         self, mocked_get_yaml_file_content, mocked_http_client_class
     ):
@@ -111,7 +111,7 @@ class WorkTypesFeederTestCase(TestCase):
         ):
             feeder.feed()
 
-    @patch("dakara_feeder.feeder.work_types.get_yaml_file_content", autoset=True)
+    @patch("dakara_feeder.feeder.work_types.get_yaml_file_content", autospec=True)
     def test_feed_error_work_type_exists(
         self, mocked_get_yaml_file_content, mocked_http_client_class
     ):

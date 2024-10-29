@@ -9,7 +9,7 @@ from dakara_feeder.metadata import FFProbeMetadataParser
 
 
 @skipUnless(FFProbeMetadataParser.is_available(), "FFProbe not installed")
-@patch("dakara_feeder.feeder.songs.HTTPClientDakara", autoset=True)
+@patch("dakara_feeder.feeder.songs.HTTPClientDakara", autospec=True)
 class SongsFeederIntegrationTestCase(TestCase):
     """Integration tests for the SongsFeeder class."""
 

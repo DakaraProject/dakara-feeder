@@ -10,7 +10,7 @@ from dakara_feeder.song import BaseSong
 from dakara_feeder.subtitle.parsing import Pysubs2SubtitleParser
 
 
-@patch("dakara_feeder.feeder.songs.HTTPClientDakara", autoset=True)
+@patch("dakara_feeder.feeder.songs.HTTPClientDakara", autospec=True)
 class SongsFeederTestCase(TestCase):
     """Test the feeder class."""
 
@@ -18,8 +18,8 @@ class SongsFeederTestCase(TestCase):
         # create base config
         self.config = {"server": {}, "kara_folder": "basepath"}
 
-    @patch.object(SongsFeeder, "check_kara_folder_path", autoset=True)
-    @patch("dakara_feeder.feeder.songs.get_custom_song", autoset=True)
+    @patch.object(SongsFeeder, "check_kara_folder_path", autospec=True)
+    @patch("dakara_feeder.feeder.songs.get_custom_song", autospec=True)
     def test_load_no_song_class(
         self,
         mocked_get_custom_song,
@@ -41,11 +41,11 @@ class SongsFeederTestCase(TestCase):
 
         # assert the call
         mocked_get_custom_song.assert_not_called()
-        mocked_check_kara_folder_path.assert_called_with()
+        mocked_check_kara_folder_path.assert_called_with(feeder)
         mocked_http_client_class.return_value.authenticate.assert_called_with()
 
-    @patch.object(SongsFeeder, "check_kara_folder_path", autoset=True)
-    @patch("dakara_feeder.feeder.songs.get_custom_song", autoset=True)
+    @patch.object(SongsFeeder, "check_kara_folder_path", autospec=True)
+    @patch("dakara_feeder.feeder.songs.get_custom_song", autospec=True)
     def test_load_with_song_class(
         self,
         mocked_get_custom_song,
@@ -82,7 +82,7 @@ class SongsFeederTestCase(TestCase):
         # assert the call
         mocked_get_custom_song.assert_called_with("module.MySong")
 
-    @patch.object(Path, "is_dir", autoset=True)
+    @patch.object(Path, "is_dir", autospec=True)
     def test_check_kara_folder_path_exists(
         self, mocked_is_dir, mocked_http_client_class
     ):
@@ -97,9 +97,9 @@ class SongsFeederTestCase(TestCase):
         feeder.check_kara_folder_path()
 
         # assert the call
-        mocked_is_dir.assert_called_with()
+        mocked_is_dir.assert_called_with(Path("basepath"))
 
-    @patch.object(Path, "is_dir", autoset=True)
+    @patch.object(Path, "is_dir", autospec=True)
     def test_check_kara_folder_path_not_exists(
         self, mocked_is_dir, mocked_http_client_class
     ):
@@ -116,9 +116,9 @@ class SongsFeederTestCase(TestCase):
         ):
             feeder.check_kara_folder_path()
 
-    @patch.object(Pysubs2SubtitleParser, "parse", autoset=True)
-    @patch.object(FFProbeMetadataParser, "parse", autoset=True)
-    @patch("dakara_feeder.feeder.songs.list_directory", autoset=True)
+    @patch.object(Pysubs2SubtitleParser, "parse", autospec=True)
+    @patch.object(FFProbeMetadataParser, "parse", autospec=True)
+    @patch("dakara_feeder.feeder.songs.list_directory", autospec=True)
     def test_feed(
         self,
         mocked_list_directory,
@@ -207,8 +207,8 @@ class SongsFeederTestCase(TestCase):
             ],
         )
 
-    @patch.object(FFProbeMetadataParser, "parse", autoset=True)
-    @patch("dakara_feeder.feeder.songs.list_directory", autoset=True)
+    @patch.object(FFProbeMetadataParser, "parse", autospec=True)
+    @patch("dakara_feeder.feeder.songs.list_directory", autospec=True)
     def test_renamed_file(
         self, mocked_list_directory, mocked_metadata_parse, mocked_http_client_class
     ):
@@ -275,9 +275,9 @@ class SongsFeederTestCase(TestCase):
             ],
         )
 
-    @patch.object(Pysubs2SubtitleParser, "parse", autoset=True)
-    @patch.object(FFProbeMetadataParser, "parse", autoset=True)
-    @patch("dakara_feeder.feeder.songs.list_directory", autoset=True)
+    @patch.object(Pysubs2SubtitleParser, "parse", autospec=True)
+    @patch.object(FFProbeMetadataParser, "parse", autospec=True)
+    @patch("dakara_feeder.feeder.songs.list_directory", autospec=True)
     def test_feed_with_force_update(
         self,
         mocked_list_directory,
@@ -345,9 +345,9 @@ class SongsFeederTestCase(TestCase):
             ],
         )
 
-    @patch.object(Pysubs2SubtitleParser, "parse", autoset=True)
-    @patch.object(FFProbeMetadataParser, "parse", autoset=True)
-    @patch("dakara_feeder.feeder.songs.list_directory", autoset=True)
+    @patch.object(Pysubs2SubtitleParser, "parse", autospec=True)
+    @patch.object(FFProbeMetadataParser, "parse", autospec=True)
+    @patch("dakara_feeder.feeder.songs.list_directory", autospec=True)
     def test_feed_with_no_prune(
         self,
         mocked_list_directory,
@@ -393,9 +393,9 @@ class SongsFeederTestCase(TestCase):
             ],
         )
 
-    @patch.object(Pysubs2SubtitleParser, "parse", autoset=True)
-    @patch.object(FFProbeMetadataParser, "parse", autoset=True)
-    @patch("dakara_feeder.feeder.songs.list_directory", autoset=True)
+    @patch.object(Pysubs2SubtitleParser, "parse", autospec=True)
+    @patch.object(FFProbeMetadataParser, "parse", autospec=True)
+    @patch("dakara_feeder.feeder.songs.list_directory", autospec=True)
     def test_create_two_songs(
         self,
         mocked_list_directory,
@@ -491,8 +491,8 @@ class SongsFeederTestCase(TestCase):
             ],
         )
 
-    @patch.object(FFProbeMetadataParser, "parse", autoset=True)
-    @patch("dakara_feeder.feeder.songs.list_directory", autoset=True)
+    @patch.object(FFProbeMetadataParser, "parse", autospec=True)
+    @patch("dakara_feeder.feeder.songs.list_directory", autospec=True)
     def test_feed_custom_song_class(
         self, mocked_list_directory, mocked_metadata_parse, mocked_http_client_class
     ):
@@ -547,9 +547,9 @@ class SongsFeederTestCase(TestCase):
             ]
         )
 
-    @patch.object(Pysubs2SubtitleParser, "parse", autoset=True)
-    @patch.object(FFProbeMetadataParser, "parse", autoset=True)
-    @patch("dakara_feeder.feeder.songs.list_directory", autoset=True)
+    @patch.object(Pysubs2SubtitleParser, "parse", autospec=True)
+    @patch.object(FFProbeMetadataParser, "parse", autospec=True)
+    @patch("dakara_feeder.feeder.songs.list_directory", autospec=True)
     def test_feed_extra_audio_file(
         self,
         mocked_list_directory,

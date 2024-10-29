@@ -5,7 +5,7 @@ from unittest.mock import call, patch
 from dakara_feeder.feeder.works import WorksFeeder
 
 
-@patch("dakara_feeder.feeder.works.HTTPClientDakara", autoset=True)
+@patch("dakara_feeder.feeder.works.HTTPClientDakara", autospec=True)
 class WorksFeederIntegrationTestCase(TestCase):
     """Integration test for the WorksFeeder class."""
 
