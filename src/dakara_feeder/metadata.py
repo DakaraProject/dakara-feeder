@@ -270,6 +270,33 @@ class FFProbeMetadataParser(MetadataParser):
         )
 
 
+parsers = {
+    "null": NullMetadataParser,
+    "mediainfo": MediainfoMetadataParser,
+    "ffprobe": FFProbeMetadataParser,
+}
+
+
+def get_parser_class(name):
+    """Retrieve a metadata parser class on name.
+
+    Args:
+        name (str): Name of the metadata parser. Is converted to lower case.
+
+    Returns:
+        type: Metadata parser class.
+    """
+    try:
+        return parsers[name.lower()]
+
+    except KeyError as key:
+        raise UnkwownMetadataParser(f"Unknown metadata parser {key}") from key
+
+
+class UnkwownMetadataParser(DakaraError):
+    """Error if unknown metadata parser is requested."""
+
+
 class MediaParseError(DakaraError):
     """Error if the metadata cannot be parsed."""
 
