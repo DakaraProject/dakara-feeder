@@ -1,5 +1,5 @@
 import inspect
-from importlib import resources
+from importlib.resources import as_file, files
 from pathlib import Path
 from re import escape
 from types import ModuleType
@@ -254,7 +254,7 @@ class DirInPathTestCase(TestCase):
 class ImportFromFileTestCase(TestCase):
     def test_import_file(self):
         """Test to import a file."""
-        with resources.path("tests.resources", "my_module.py") as file:
+        with as_file(files("tests.resources").joinpath("my_module.py")) as file:
             module = customization.import_from_file(Path(file))
 
         self.assertTrue(inspect.ismodule(module))

@@ -1,5 +1,5 @@
 from datetime import timedelta
-from importlib.resources import path
+from importlib.resources import as_file, files
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from unittest import TestCase, skipUnless
@@ -26,7 +26,7 @@ class MediainfoMetadataParserIntegrationTestCase(TestCase):
 
     def test_get_duration(self):
         """Test to get duration."""
-        with path("tests.resources.media", "dummy.mkv") as file:
+        with as_file(files("tests.resources.media").joinpath("dummy.mkv")) as file:
             parser = MediainfoMetadataParser.parse(file)
 
         self.assertEqual(
@@ -35,14 +35,14 @@ class MediainfoMetadataParserIntegrationTestCase(TestCase):
 
     def test_get_number_audio_tracks(self):
         """Test to get number of audio tracks."""
-        with path("tests.resources.media", "dummy.mkv") as file:
+        with as_file(files("tests.resources.media").joinpath("dummy.mkv")) as file:
             parser = MediainfoMetadataParser.parse(file)
 
         self.assertEqual(parser.get_audio_tracks_count(), 2)
 
     def test_get_number_subtitle_tracks(self):
         """Test to get number of subtitle tracks."""
-        with path("tests.resources.media", "dummy.mkv") as file:
+        with as_file(files("tests.resources.media").joinpath("dummy.mkv")) as file:
             parser = MediainfoMetadataParser.parse(file)
 
         self.assertEqual(parser.get_subtitle_tracks_count(), 1)
@@ -74,7 +74,7 @@ class FFProbeMetadataParserIntegrationTestCase(TestCase):
 
     def test_get_duration(self):
         """Test to get duration."""
-        with path("tests.resources.media", "dummy.mkv") as file:
+        with as_file(files("tests.resources.media").joinpath("dummy.mkv")) as file:
             parser = FFProbeMetadataParser.parse(file)
 
         self.assertEqual(
@@ -83,14 +83,14 @@ class FFProbeMetadataParserIntegrationTestCase(TestCase):
 
     def test_get_number_audio_tracks(self):
         """Test to get number of audio tracks."""
-        with path("tests.resources.media", "dummy.mkv") as file:
+        with as_file(files("tests.resources.media").joinpath("dummy.mkv")) as file:
             parser = FFProbeMetadataParser.parse(file)
 
         self.assertEqual(parser.get_audio_tracks_count(), 2)
 
     def test_get_number_subtitle_tracks(self):
         """Test to get number of subtitle tracks."""
-        with path("tests.resources.media", "dummy.mkv") as file:
+        with as_file(files("tests.resources.media").joinpath("dummy.mkv")) as file:
             parser = FFProbeMetadataParser.parse(file)
 
         self.assertEqual(parser.get_subtitle_tracks_count(), 1)

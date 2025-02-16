@@ -1,4 +1,4 @@
-from importlib.resources import path
+from importlib.resources import as_file, files
 from unittest import TestCase
 from unittest.mock import call, patch
 
@@ -31,8 +31,10 @@ class WorksFeederIntegrationTestCase(TestCase):
         ]
 
         # create the object
-        with path(
-            "tests.integration.resources.works", "correct_work_file.json"
+        with as_file(
+            files("tests.integration.resources.works").joinpath(
+                "correct_work_file.json"
+            )
         ) as filepath:
             feeder = WorksFeeder(self.config, filepath, progress=False)
 
