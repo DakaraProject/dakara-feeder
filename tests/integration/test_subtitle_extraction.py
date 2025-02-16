@@ -1,4 +1,4 @@
-from importlib.resources import path
+from importlib.resources import as_file, files
 from pathlib import Path
 from unittest import TestCase, skipUnless
 
@@ -11,11 +11,11 @@ class FFmpegSubtitleExtractorTestCase(TestCase):
 
     def test_extract(self):
         """Test to extract subtitle from file."""
-        with path("tests.resources.media", "dummy.mkv") as file:
+        with as_file(files("tests.resources.media").joinpath("dummy.mkv")) as file:
             extractor = FFmpegSubtitleExtractor.extract(file)
             subtitle = extractor.get_subtitle()
 
-        with path("tests.resources.subtitles", "dummy.ass") as file:
+        with as_file(files("tests.resources.subtitles").joinpath("dummy.ass")) as file:
             subtitle_expected = file.read_text()
 
         self.assertEqual(subtitle, subtitle_expected)

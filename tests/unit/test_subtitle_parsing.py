@@ -1,4 +1,4 @@
-from importlib.resources import path
+from importlib.resources import as_file, files
 from pathlib import Path
 from unittest import TestCase
 from unittest.mock import patch
@@ -16,7 +16,7 @@ class TXTSubtitleParserTestCase(TestCase):
 
     def test_parse(self):
         """Parse text file."""
-        with path("tests.resources.subtitles", "plain.txt") as file:
+        with as_file(files("tests.resources.subtitles").joinpath("plain.txt")) as file:
             parser = TXTSubtitleParser.parse(file)
             self.assertEqual(parser.get_lyrics(), file.read_text())
 
@@ -38,13 +38,15 @@ class Pysubs2SubtitleParserTestCase(TestCase):
         This method is called from other tests methods.
         """
         # open and parse given file
-        with path("tests.resources.subtitles", file_name) as file:
+        with as_file(files("tests.resources.subtitles").joinpath(file_name)) as file:
             parser = Pysubs2SubtitleParser.parse(file)
             lyrics = parser.get_lyrics()
             lines = lyrics.splitlines()
 
         # open expected result
-        with path("tests.resources.subtitles", file_name + "_expected") as file:
+        with as_file(
+            files("tests.resources.subtitles").joinpath(file_name + "_expected")
+        ) as file:
             expected_lines = file.read_text().splitlines()
 
         # check against expected file
@@ -57,14 +59,16 @@ class Pysubs2SubtitleParserTestCase(TestCase):
     def test_simple_string(self):
         """Test simple ass file from string."""
         # open and parse given file
-        with path("tests.resources.subtitles", "simple.ass") as file:
+        with as_file(files("tests.resources.subtitles").joinpath("simple.ass")) as file:
             content = file.read_text()
             parser = Pysubs2SubtitleParser.parse_string(content)
             lyrics = parser.get_lyrics()
             lines = lyrics.splitlines()
 
         # open expected result
-        with path("tests.resources.subtitles", "simple.ass_expected") as file:
+        with as_file(
+            files("tests.resources.subtitles").joinpath("simple.ass_expected")
+        ) as file:
             expected_lines = file.read_text().splitlines()
 
         # check against expected file
