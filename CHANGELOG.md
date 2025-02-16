@@ -32,6 +32,7 @@
 
 ### Added
 
+- Added Python 3.13 support.
 - MacOS support.
 - Added Python 3.12 support.
 
