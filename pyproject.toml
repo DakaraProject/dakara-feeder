@@ -42,6 +42,7 @@ dev = [
         "pytest>=8.3.4,<8.4.0",
         "ruff>=0.9.6,<0.10.0",
 ]
+# note: update .pre-commit-config.yaml as well
 
 [project.urls]
 Homepage = "https://github.com/DakaraProject/dakara-feeder"
