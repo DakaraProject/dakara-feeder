@@ -50,6 +50,14 @@ kara_folder: /path/to/folder
 # Default is BaseSong, which is pretty basic.
 # custom_song_class: module_name.Song
 
+# Metadata parser to use
+# Tool to extract metadata from files. Either:
+#   ffmpeg: Requires FFMpeg installed. Fastest method.
+#   mediainfo: Requires mediainfo installed. Slower, alternative method.
+#   null: Dummy parser. Parse nothing, for testing purposes.
+# Default is ffprobe
+# metadata_parser: ffprobe
+
 # Other parameters
 
 # Minimal level of messages to log
