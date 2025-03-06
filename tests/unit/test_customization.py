@@ -15,6 +15,7 @@ from dakara_feeder.song import BaseSong
 class GetCustomSongTestCase(TestCase):
     def test_get_from_class(self, mocked_import_from_module, mocked_import_from_file):
         """Test to get a valid song class from class module name."""
+
         # mock the returned class
         class MySong(BaseSong):
             pass
@@ -156,6 +157,7 @@ class GetCustomSongTestCase(TestCase):
         self, mocked_import_from_module, mocked_import_from_file
     ):
         """Test to get a song class that is not a subclass of Song."""
+
         # mock the returned class
         class MySong:
             pass
