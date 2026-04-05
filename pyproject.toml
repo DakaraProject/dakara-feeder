@@ -7,12 +7,11 @@ description = "External database feeder for the Dakara Project"
 readme = "README.md"
 license = {file = "LICENSE"}
 dynamic = ["version"]
-requires-python = ">= 3.9"
+requires-python = ">= 3.10"
 classifiers = [
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.9",
         "Programming Language :: Python :: 3.10",
         "Programming Language :: Python :: 3.11",
         "Programming Language :: Python :: 3.12",
@@ -22,24 +21,25 @@ classifiers = [
         "Intended Audience :: Developers",
 ]
 dependencies = [
-        "dakarabase>=2.1.0,<2.2.0",
+        "dakarabase>=2.2.0,<2.3.0",
         "filetype>=1.2.0,<1.3.0",
-        "packaging>=24.2,<25.0",
+        "packaging>=26.0,<27.0",
         "pymediainfo>=7.0.1,<7.1.0",
-        "pysubs2>=1.8.0,<1.9.0",
+        "pysubs2>=1.8.1,<1.9.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-        "black>=25.1.0,<25.2.0",
+        "black>=26.3.1,<27.0.0",
         "codecov>=2.1.13,<2.2.0",
-        "isort>=6.0.0,<6.1.0",
-        "pdoc>=15.0.1,<15.2.0",
-        "pre-commit>=4.1.0,<4.2.0",
-        "pytest-cov>=6.0.0,<6.1.0",
-        "pytest>=8.3.4,<8.4.0",
-        "ruff>=0.9.6,<0.10.0",
+        "isort>=8.0.1,<8.1.0",
+        "pdoc>=16.0.0,<16.1.0",
+        "pre-commit>=4.5.1,<4.6.0",
+        "pytest-cov>=7.1.0,<7.2.0",
+        "pytest>=9.0.2,<9.1.0",
+        "ruff>=0.15.9,<0.16.0",
 ]
+# note: update the build-system section below
 # note: update .pre-commit-config.yaml as well
 
 [project.urls]
@@ -52,7 +52,7 @@ Changelog = "https://github.com/DakaraProject/dakara-feeder/blob/master/CHANGELO
 dakara-feeder = "dakara_feeder.__main__:main"
 
 [build-system]
-requires = ["setuptools>=75.8.0"]
+requires = ["setuptools>=82.0.1"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
@@ -62,7 +62,7 @@ version = {attr = "dakara_feeder.version.__version__" }
 where = ["src"]
 
 [tool.pytest]
-addopts = "--cov=dakara_feeder"
+addopts = ["--cov=dakara_feeder"]
 
 [tool.isort]
 profile = "black"
