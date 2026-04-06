@@ -52,7 +52,7 @@ kara_folder: /path/to/folder
 
 # Metadata parser to use
 # Tool to extract metadata from files. Either:
-#   ffmpeg: Requires FFMpeg installed. Fastest method.
+#   ffprobe: Requires FFProbe installed (from FFMpeg). Fastest method.
 #   mediainfo: Requires mediainfo installed. Slower, alternative method.
 #   null: Dummy parser. Parse nothing, for testing purposes.
 # Default is ffprobe
