@@ -1,4 +1,4 @@
-from importlib.resources import path
+from importlib.resources import as_file, files
 from pathlib import Path
 from shutil import copy
 from tempfile import TemporaryDirectory
@@ -167,10 +167,10 @@ class ListDirectoryIntegrationTestCase(TestCase):
         # call the function
         with TemporaryDirectory() as temp:
             # copy required files
-            with path("tests.resources.media", "dummy.ass") as file:
+            with as_file(files("tests.resources.media").joinpath("dummy.ass")) as file:
                 copy(file, temp)
 
-            with path("tests.resources.media", "dummy.mkv") as file:
+            with as_file(files("tests.resources.media").joinpath("dummy.mkv")) as file:
                 copy(file, temp)
 
             with self.assertLogs("dakara_feeder.directory", "DEBUG"):
@@ -188,38 +188,40 @@ class GetMainTypeTestCase(TestCase):
 
     def test_video(self):
         """Test the common video files."""
-        with path("tests.resources.filetype", "file.avi") as file:
+        with as_file(files("tests.resources.filetype").joinpath("file.avi")) as file:
             self.assertEqual(get_main_type(file), "video")
 
-        with path("tests.resources.filetype", "file.mkv") as file:
+        with as_file(files("tests.resources.filetype").joinpath("file.mkv")) as file:
             self.assertEqual(get_main_type(file), "video")
 
-        with path("tests.resources.filetype", "file_upper.MKV") as file:
+        with as_file(
+            files("tests.resources.filetype").joinpath("file_upper.MKV")
+        ) as file:
             self.assertEqual(get_main_type(file), "video")
 
-        with path("tests.resources.filetype", "file.mp4") as file:
+        with as_file(files("tests.resources.filetype").joinpath("file.mp4")) as file:
             self.assertEqual(get_main_type(file), "video")
 
     def test_audio(self):
         """Test the common audio files."""
-        with path("tests.resources.filetype", "file.flac") as file:
+        with as_file(files("tests.resources.filetype").joinpath("file.flac")) as file:
             self.assertEqual(get_main_type(file), "audio")
 
-        with path("tests.resources.filetype", "file.mp3") as file:
+        with as_file(files("tests.resources.filetype").joinpath("file.mp3")) as file:
             self.assertEqual(get_main_type(file), "audio")
 
-        with path("tests.resources.filetype", "file.ogg") as file:
+        with as_file(files("tests.resources.filetype").joinpath("file.ogg")) as file:
             self.assertEqual(get_main_type(file), "audio")
 
     def test_subtitle(self):
         """Test the common subtitles files."""
-        with path("tests.resources.filetype", "file.ass") as file:
+        with as_file(files("tests.resources.filetype").joinpath("file.ass")) as file:
             self.assertIsNone(get_main_type(file))
 
-        with path("tests.resources.filetype", "file.ssa") as file:
+        with as_file(files("tests.resources.filetype").joinpath("file.ssa")) as file:
             self.assertIsNone(get_main_type(file))
 
-        with path("tests.resources.filetype", "file.srt") as file:
+        with as_file(files("tests.resources.filetype").joinpath("file.srt")) as file:
             self.assertIsNone(get_main_type(file))
 
 

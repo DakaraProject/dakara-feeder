@@ -1,5 +1,5 @@
 import inspect
-from importlib import resources
+from importlib.resources import as_file, files
 from pathlib import Path
 from re import escape
 from types import ModuleType
@@ -15,6 +15,7 @@ from dakara_feeder.song import BaseSong
 class GetCustomSongTestCase(TestCase):
     def test_get_from_class(self, mocked_import_from_module, mocked_import_from_file):
         """Test to get a valid song class from class module name."""
+
         # mock the returned class
         class MySong(BaseSong):
             pass
@@ -156,6 +157,7 @@ class GetCustomSongTestCase(TestCase):
         self, mocked_import_from_module, mocked_import_from_file
     ):
         """Test to get a song class that is not a subclass of Song."""
+
         # mock the returned class
         class MySong:
             pass
@@ -254,7 +256,7 @@ class DirInPathTestCase(TestCase):
 class ImportFromFileTestCase(TestCase):
     def test_import_file(self):
         """Test to import a file."""
-        with resources.path("tests.resources", "my_module.py") as file:
+        with as_file(files("tests.resources").joinpath("my_module.py")) as file:
             module = customization.import_from_file(Path(file))
 
         self.assertTrue(inspect.ismodule(module))

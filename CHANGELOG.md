@@ -30,13 +30,21 @@
 
 ## Unreleased
 
+### Removed
+
+- Dropped Python 3.9.
+
+## 1.9.0 - 2025-03-06
+
 ### Added
 
+- Added Python 3.13 support.
 - MacOS support.
 - Added Python 3.12 support.
 
 ### Removed
 
+- Dropped Python 3.8 support.
 - Dropped Python 3.7 support.
 
 ## 1.8.0 - 2022-11-23

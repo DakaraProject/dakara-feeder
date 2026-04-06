@@ -1,4 +1,4 @@
-from importlib.resources import path
+from importlib.resources import as_file, files
 from shutil import copy
 from tempfile import TemporaryDirectory
 from unittest import TestCase, skipUnless
@@ -21,10 +21,10 @@ class SongsFeederIntegrationTestCase(TestCase):
         # create the object
         with TemporaryDirectory() as temp:
             # copy required files
-            with path("tests.resources.media", "dummy.ass") as file:
+            with as_file(files("tests.resources.media").joinpath("dummy.ass")) as file:
                 copy(file, temp)
 
-            with path("tests.resources.media", "dummy.mkv") as file:
+            with as_file(files("tests.resources.media").joinpath("dummy.mkv")) as file:
                 copy(file, temp)
 
             config = {"server": {}, "kara_folder": str(temp)}
