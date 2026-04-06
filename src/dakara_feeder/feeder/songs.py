@@ -9,7 +9,7 @@ from dakara_base.progress_bar import null_bar, progress_bar
 from dakara_feeder.customization import get_custom_song
 from dakara_feeder.difference import generate_diff, match_similar
 from dakara_feeder.directory import list_directory
-from dakara_feeder.metadata import NullMetadataParser, get_parser_class
+from dakara_feeder.metadata import get_parser_class
 from dakara_feeder.similarity import calculate_file_path_similarity
 from dakara_feeder.song import BaseSong
 from dakara_feeder.utils import divide_chunks
@@ -55,17 +55,13 @@ class SongsFeeder:
         self.bar = progress_bar if progress else null_bar
         self.song_class_module_name = config.get("custom_song_class")
         self.song_class = BaseSong
-        self.metadata_parser_class_name = config.get("metadata_parser")
-        self.metadata_parser_class = NullMetadataParser
+        self.metadata_parser_class = get_parser_class(config.get("metadata_parser"))
 
     def load(self):
         """Execute side-effect initialization tasks."""
         # select song class
         if self.song_class_module_name:
             self.song_class = get_custom_song(self.song_class_module_name)
-
-        # select metadata parser
-        self.metadata_parser_class = get_parser_class(self.metadata_parser_class_name)
 
         # check directory exists
         self.check_kara_folder_path()
@@ -140,7 +136,9 @@ class SongsFeeder:
             updated_songs = [
                 (
                     self.song_class(
-                        self.kara_folder_path, new_songs_paths_map[new_song_path]
+                        self.kara_folder_path,
+                        new_songs_paths_map[new_song_path],
+                        self.metadata_parser_class,
                     ).get_representation(),
                     old_songs_id_by_path[old_song_path],
                 )

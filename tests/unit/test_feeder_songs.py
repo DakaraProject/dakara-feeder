@@ -16,7 +16,11 @@ class SongsFeederTestCase(TestCase):
 
     def setUp(self):
         # create base config
-        self.config = {"server": {}, "kara_folder": "basepath"}
+        self.config = {
+            "server": {},
+            "kara_folder": "basepath",
+            "metadata_parser": "ffprobe",
+        }
 
     @patch.object(SongsFeeder, "check_kara_folder_path", autospec=True)
     @patch("dakara_feeder.feeder.songs.get_custom_song", autospec=True)
@@ -32,6 +36,7 @@ class SongsFeederTestCase(TestCase):
 
         # pre assert
         self.assertIs(feeder.song_class, BaseSong)
+        self.assertIs(feeder.metadata_parser_class, FFProbeMetadataParser)
 
         # call the method
         feeder.load()
@@ -61,14 +66,14 @@ class SongsFeederTestCase(TestCase):
         mocked_get_custom_song.return_value = MySong
 
         # create the config
-        config = {
-            "server": {},
-            "kara_folder": "basepath",
-            "custom_song_class": "module.MySong",
-        }
+        self.config.update(
+            {
+                "custom_song_class": "module.MySong",
+            }
+        )
 
         # create the object
-        feeder = SongsFeeder(config, progress=False)
+        feeder = SongsFeeder(self.config, progress=False)
 
         # pre assert
         self.assertIs(feeder.song_class, BaseSong)
@@ -393,6 +398,8 @@ class SongsFeederTestCase(TestCase):
             ],
         )
 
+    maxDiff = None
+
     @patch.object(Pysubs2SubtitleParser, "parse", autospec=True)
     @patch.object(FFProbeMetadataParser, "parse", autospec=True)
     @patch("dakara_feeder.feeder.songs.list_directory", autospec=True)
@@ -463,6 +470,8 @@ class SongsFeederTestCase(TestCase):
         # check called once
         self.assertEqual(len(post_calls), 1)
 
+        mocked_metadata_parse.assert_called()
+
         # check one positional argument
         (
             _,
@@ -512,14 +521,14 @@ class SongsFeederTestCase(TestCase):
                 return ["artist1", "artist2"]
 
         # create the config
-        config = {
-            "server": {},
-            "custom_song_class": "custom_song_module",
-            "kara_folder": "basepath",
-        }
+        self.config.update(
+            {
+                "custom_song_class": "custom_song_module",
+            }
+        )
 
         # create the object
-        feeder = SongsFeeder(config, progress=False)
+        feeder = SongsFeeder(self.config, progress=False)
         feeder.song_class = Song
 
         # call the method
@@ -573,11 +582,8 @@ class SongsFeederTestCase(TestCase):
         mocked_metadata_parse.return_value.get_audio_tracks_count.return_value = 1
         mocked_subtitle_parse.return_value.get_lyrics.return_value = "lyri lyri"
 
-        # create the config
-        config = {"server": {}, "kara_folder": "basepath"}
-
         # create the object
-        feeder = SongsFeeder(config, progress=False)
+        feeder = SongsFeeder(self.config, progress=False)
 
         # call the method
         with self.assertLogs("dakara_feeder.feeder.songs", "DEBUG"):

@@ -67,6 +67,7 @@ class BaseSong:
     Args:
         base_directory (pathlib.Path): Path to the scanned directory.
         paths (directory_lister.SongPaths): Paths of the song file.
+        metadata_parser_class (type): Class of the metadata parser.
 
     Attributes:
         metadata_class (type): Class of the metadata parser to use.

@@ -281,11 +281,15 @@ def get_parser_class(name):
     """Retrieve a metadata parser class on name.
 
     Args:
-        name (str): Name of the metadata parser. Is converted to lower case.
+        name (str): Name of the metadata parser. It will be converted to lower
+            case. If `None`, returns `FFProbeMetadataParser`.
 
     Returns:
         type: Metadata parser class.
     """
+    if name is None:
+        return FFProbeMetadataParser
+
     try:
         return parsers[name.lower()]
 
