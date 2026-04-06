@@ -277,7 +277,7 @@ parsers = {
 }
 
 
-def get_parser_class(name):
+def get_parser_class(name=None):
     """Retrieve a metadata parser class on name.
 
     Args:
@@ -294,10 +294,10 @@ def get_parser_class(name):
         return parsers[name.lower()]
 
     except KeyError as key:
-        raise UnkwownMetadataParser(f"Unknown metadata parser {key}") from key
+        raise UnknownMetadataParser(f"Unknown metadata parser {key}") from key
 
 
-class UnkwownMetadataParser(DakaraError):
+class UnknownMetadataParser(DakaraError):
     """Error if unknown metadata parser is requested."""
 
 

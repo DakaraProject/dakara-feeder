@@ -12,6 +12,8 @@ from dakara_feeder.metadata import (
     MediainfoNotInstalledError,
     MediaParseError,
     NullMetadataParser,
+    UnknownMetadataParser,
+    get_parser_class,
 )
 
 
@@ -175,3 +177,30 @@ class FFProbeMetadataParserTestCase(TestCase):
             }
         )
         self.assertEqual(parser.get_subtitle_tracks_count(), 1)
+
+
+class GetParserClassTestCase(TestCase):
+    """Test the metadata parser class getter."""
+
+    def test_get_default(self):
+        """Test to get the default metadata parser."""
+        self.assertIs(get_parser_class(), FFProbeMetadataParser)
+
+    def test_get_ffprobe(self):
+        """Test to get the FFProbe metadata parser."""
+        self.assertIs(get_parser_class("ffprobe"), FFProbeMetadataParser)
+
+    def test_get_mediainfo(self):
+        """Test to get the Mediainfo metadata parser."""
+        self.assertIs(get_parser_class("mediainfo"), MediainfoMetadataParser)
+
+    def test_get_null(self):
+        """Test to get the null metadata parser."""
+        self.assertIs(get_parser_class("null"), NullMetadataParser)
+
+    def test_get_unknown(self):
+        """Test to get an unknown metadata parser."""
+        with self.assertRaisesRegex(
+            UnknownMetadataParser, "Unknown metadata parser 'unknown'"
+        ):
+            get_parser_class("unknown")
