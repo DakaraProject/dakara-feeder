@@ -32,7 +32,7 @@
 
 ### Changed
 
-- The metadata parser can now be specified with the configuration key `metadata_parser`. Accepted values are `ffprobe`, `mediainfo`, or `null` (for testing only).
+- The metadata parser can now be specified with the configuration key `metadata_parser`. Accepted values are `ffprobe` (default), `mediainfo`, or `null` (for testing only).
 
 ### Removed
 
