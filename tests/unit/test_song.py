@@ -27,7 +27,7 @@ class BaseSongTestCase(TestCase):
         paths = SongPaths(Path("file.mp4"), subtitle=Path("file.ass"))
 
         # create BaseSong instance
-        song = BaseSong(Path("/base-dir"), paths)
+        song = BaseSong(Path("/base-dir"), paths, FFProbeMetadataParser)
 
         # get song representation
         with self.assertLogs("dakara_feeder.song") as logger:
@@ -54,7 +54,7 @@ class BaseSongTestCase(TestCase):
         paths = SongPaths(Path("file.mp4"), subtitle=Path("file.ass"))
 
         # create BaseSong instance
-        song = BaseSong(Path("/base-dir"), paths)
+        song = BaseSong(Path("/base-dir"), paths, FFProbeMetadataParser)
 
         # get song representation
         with self.assertLogs("dakara_feeder.song") as logger:

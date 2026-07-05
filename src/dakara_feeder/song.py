@@ -3,11 +3,7 @@
 import logging
 from pathlib import Path
 
-from dakara_feeder.metadata import (
-    FFProbeMetadataParser,
-    MediaParseError,
-    NullMetadataParser,
-)
+from dakara_feeder.metadata import MediaParseError, NullMetadataParser
 from dakara_feeder.subtitle.parsing import Pysubs2SubtitleParser, SubtitleParseError
 
 logger = logging.getLogger(__name__)
@@ -71,6 +67,7 @@ class BaseSong:
     Args:
         base_directory (pathlib.Path): Path to the scanned directory.
         paths (directory_lister.SongPaths): Paths of the song file.
+        metadata_parser_class (type): Class of the metadata parser.
 
     Attributes:
         metadata_class (type): Class of the metadata parser to use.
@@ -88,15 +85,14 @@ class BaseSong:
             containing metadata of the video file.
     """
 
-    metadata_class = FFProbeMetadataParser
-
-    def __init__(self, base_directory, paths):
+    def __init__(self, base_directory, paths, metadata_parser_class):
         self.base_directory = base_directory
         self.video_path = paths.video
         self.audio_path = paths.audio
         self.subtitle_path = paths.subtitle
         self.others_path = paths.others
         self.metadata = NullMetadataParser.parse(self.video_path)
+        self.metadata_class = metadata_parser_class
 
     def parse_metadata(self):
         """Use the requested metadata parser to parse video file."""
