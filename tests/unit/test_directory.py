@@ -213,6 +213,12 @@ class GetMainTypeTestCase(TestCase):
         with as_file(files("tests.resources.filetype").joinpath("file.ogg")) as file:
             self.assertEqual(get_main_type(file), "audio")
 
+        with as_file(files("tests.resources.filetype").joinpath("file.m4a")) as file:
+            self.assertEqual(get_main_type(file), "audio")
+
+        with as_file(files("tests.resources.filetype").joinpath("file.mka")) as file:
+            self.assertEqual(get_main_type(file), "audio")
+
     def test_subtitle(self):
         """Test the common subtitles files."""
         with as_file(files("tests.resources.filetype").joinpath("file.ass")) as file:
