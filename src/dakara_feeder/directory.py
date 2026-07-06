@@ -126,6 +126,7 @@ def get_mimetype_by_extension(file):
     Returns
         str: MIME type. `None` if the MIME type cannot be identified.
     """
+    # TODO Use `guess_type_file` from Python 3.13
     mimetype, _ = mimetypes.guess_type(file, strict=False)
     return mimetype
 
