@@ -8,6 +8,8 @@ from unittest.mock import patch
 from dakara_feeder.directory import (
     SongPaths,
     get_main_type,
+    get_mimetype_by_extension,
+    get_mimetype_by_magic_number,
     group_by_type,
     list_directory,
 )
@@ -173,7 +175,150 @@ class ListDirectoryIntegrationTestCase(TestCase):
         )
 
 
+@patch(
+    "dakara_feeder.directory.get_mimetype_by_magic_number",
+    return_value=None,
+    autospec=True,
+)
+@patch(
+    "dakara_feeder.directory.get_mimetype_by_extension",
+    return_value=None,
+    autospec=True,
+)
+@patch("dakara_feeder.directory.is_subtitle", return_value=False, autospec=True)
+@patch("dakara_feeder.directory.is_audio", return_value=False, autospec=True)
+@patch("dakara_feeder.directory.is_video", return_value=False, autospec=True)
 class GetMainTypeTestCase(TestCase):
+    def test_known_video_extension(
+        self,
+        mocked_is_video,
+        mocked_is_audio,
+        mocked_is_subtitle,
+        mocked_get_mimetype_by_extension,
+        mocked_get_mimetype_by_magic_number,
+    ):
+        """Test video file with known extensions."""
+        mocked_is_video.return_value = True
+        self.assertEqual(get_main_type(Path("file.ext")), "video")
+        mocked_get_mimetype_by_extension.assert_not_called()
+        mocked_get_mimetype_by_magic_number.assert_not_called()
+
+    def test_known_audio_extension(
+        self,
+        mocked_is_video,
+        mocked_is_audio,
+        mocked_is_subtitle,
+        mocked_get_mimetype_by_extension,
+        mocked_get_mimetype_by_magic_number,
+    ):
+        """Test audio file with known extensions."""
+        mocked_is_audio.return_value = True
+        self.assertEqual(get_main_type(Path("file.ext")), "audio")
+        mocked_get_mimetype_by_extension.assert_not_called()
+        mocked_get_mimetype_by_magic_number.assert_not_called()
+
+    def test_known_subtitle_extension(
+        self,
+        mocked_is_video,
+        mocked_is_audio,
+        mocked_is_subtitle,
+        mocked_get_mimetype_by_extension,
+        mocked_get_mimetype_by_magic_number,
+    ):
+        """Test subtitle file with known extensions."""
+        mocked_is_subtitle.return_value = True
+        self.assertEqual(get_main_type(Path("file.ext")), "subtitle")
+        mocked_get_mimetype_by_extension.assert_not_called()
+        mocked_get_mimetype_by_magic_number.assert_not_called()
+
+    def test_video_extension(
+        self,
+        mocked_is_video,
+        mocked_is_audio,
+        mocked_is_subtitle,
+        mocked_get_mimetype_by_extension,
+        mocked_get_mimetype_by_magic_number,
+    ):
+        """Test video file with extensions."""
+        mocked_get_mimetype_by_extension.return_value = "video/string"
+        self.assertEqual(get_main_type(Path("file.ext")), "video")
+        mocked_get_mimetype_by_magic_number.assert_not_called()
+
+    def test_audio_extension(
+        self,
+        mocked_is_video,
+        mocked_is_audio,
+        mocked_is_subtitle,
+        mocked_get_mimetype_by_extension,
+        mocked_get_mimetype_by_magic_number,
+    ):
+        """Test audio file with extensions."""
+        mocked_get_mimetype_by_extension.return_value = "audio/string"
+        self.assertEqual(get_main_type(Path("file.ext")), "audio")
+        mocked_get_mimetype_by_magic_number.assert_not_called()
+
+    def test_subtitle_extension(
+        self,
+        mocked_is_video,
+        mocked_is_audio,
+        mocked_is_subtitle,
+        mocked_get_mimetype_by_extension,
+        mocked_get_mimetype_by_magic_number,
+    ):
+        """Test subtitle file with extensions."""
+        mocked_get_mimetype_by_extension.return_value = "subtitle/string"
+        self.assertEqual(get_main_type(Path("file.ext")), "subtitle")
+        mocked_get_mimetype_by_magic_number.assert_not_called()
+
+    def test_video_magic_number(
+        self,
+        mocked_is_video,
+        mocked_is_audio,
+        mocked_is_subtitle,
+        mocked_get_mimetype_by_extension,
+        mocked_get_mimetype_by_magic_number,
+    ):
+        """Test video file with magic number."""
+        mocked_get_mimetype_by_magic_number.return_value = "video/string"
+        self.assertEqual(get_main_type(Path("file.ext")), "video")
+
+    def test_audio_magic_number(
+        self,
+        mocked_is_video,
+        mocked_is_audio,
+        mocked_is_subtitle,
+        mocked_get_mimetype_by_extension,
+        mocked_get_mimetype_by_magic_number,
+    ):
+        """Test audio file with magic number."""
+        mocked_get_mimetype_by_magic_number.return_value = "audio/string"
+        self.assertEqual(get_main_type(Path("file.ext")), "audio")
+
+    def test_subtitle_magic_number(
+        self,
+        mocked_is_video,
+        mocked_is_audio,
+        mocked_is_subtitle,
+        mocked_get_mimetype_by_extension,
+        mocked_get_mimetype_by_magic_number,
+    ):
+        """Test subtitle file with magic number."""
+        mocked_get_mimetype_by_magic_number.return_value = "subtitle/string"
+        self.assertEqual(get_main_type(Path("file.ext")), "subtitle")
+
+    def test_none(
+        self,
+        mocked_is_video,
+        mocked_is_audio,
+        mocked_is_subtitle,
+        mocked_get_mimetype_by_extension,
+        mocked_get_mimetype_by_magic_number,
+    ):
+        """Test to get no type."""
+        self.assertIsNone(get_main_type(Path("file.ext")))
+
+
+class GetMainTypeIntegrationTestCase(TestCase):
     """Test MIME can be guessed successfully."""
 
     def test_video(self):
@@ -219,6 +364,27 @@ class GetMainTypeTestCase(TestCase):
 
         with as_file(files("tests.resources.filetype").joinpath("file.srt")) as file:
             self.assertEqual(get_main_type(file), "subtitle")
+
+
+@patch("dakara_feeder.directory.filetype.guess", autospec=True)
+class GetMimetypeByMagicNumberTestCase(TestCase):
+    def test_get_mimetype(self, mocked_guess):
+        """Test to get a mimetype by magic number."""
+        mocked_guess.return_value.mime = "type/subtype"
+        self.assertEqual(get_mimetype_by_magic_number(Path("file.ext")), "type/subtype")
+
+    def test_get_none(self, mocked_guess):
+        """Test to get no mimetype by magic number."""
+        mocked_guess.return_value = None
+        self.assertIsNone(get_mimetype_by_magic_number(Path("file.ext")))
+
+
+@patch("dakara_feeder.directory.mimetypes.guess_type", autospec=True)
+class GetMimetypeByExtensionTestCase(TestCase):
+    def test_get_mimetype(self, mocked_guess_type):
+        """Test to get a mimetype by extension."""
+        mocked_guess_type.return_value = "type/subtype", None
+        self.assertEqual(get_mimetype_by_extension(Path("file.ext")), "type/subtype")
 
 
 @patch(
