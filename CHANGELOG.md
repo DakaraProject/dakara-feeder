@@ -38,6 +38,10 @@
 
 - Dropped Python 3.9.
 
+### Fixed
+
+- Matroshka files containing only an audio track and having the `.mka` extension are correctly detected as adio files.
+
 ## 1.9.0 - 2025-03-06
 
 ### Added
