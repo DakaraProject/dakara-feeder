@@ -6,6 +6,7 @@ from itertools import groupby
 
 import filetype
 
+from dakara_feeder.media import is_audio, is_video
 from dakara_feeder.subtitle.parsing import is_subtitle
 
 logger = logging.getLogger(__name__)
@@ -57,20 +58,34 @@ def get_path_without_extension(path):
 def get_main_type(file):
     """Get the type of a given file.
 
+    First try a manual detection on expected extensions, as this is required
+    for subtitles, and as some audio files can be mistaken for video files
+    (notably, `.mka` files for Python 3.11 and lower). Then try an automatic
+    detection based on the extension of the file. If this fails, try an
+    automatic detection based on the magic numbers in the file.
+
     Args:
         file (pathlib.Path): Absolute path to the file to extract the type.
 
     Returns
         str: Type if it can be extracted, `None` otherwise.
     """
+    # manual detection of video files
+    if is_video(file):
+        return "video"
+
+    # manual detection of audio files
+    if is_audio(file):
+        return "audio"
+
     # manual detection of subtitle files
     if is_subtitle(file):
         return "subtitle"
 
-    # detect using extension
+    # automatic detection using extension
     mimetype = get_mimetype_by_extension(file)
 
-    # if it failed, detect with magic number
+    # if it failed, automatic detection using magic number
     if mimetype is None:
         mimetype = get_mimetype_by_magic_number(file)
 
@@ -78,6 +93,7 @@ def get_main_type(file):
     if mimetype is None:
         return None
 
+    # extract main type from MIME type
     maintype, _ = mimetype.split("/")
     return maintype
 
