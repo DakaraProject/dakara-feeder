@@ -33,10 +33,12 @@
 ### Changed
 
 - The metadata parser can now be specified with the configuration key `metadata_parser`. Accepted values are `ffprobe` (default), `mediainfo`, or `null` (for testing only).
+- Songs with instrumental version are specified either with the `instrumental_file` field, if there is an audio file of the same name in the same directory as the video file, or with the `instrumental_track` field, if the video file has a second audio track. Both fields are sent to the server, instead of the `has_instrumental` field (see removed sub-section).
 
 ### Removed
 
 - Dropped Python 3.9.
+- Removed the `has_instrumental` field of songs, in favor of `instrumental_file` and `instrumental_track`.
 
 ### Fixed
 
