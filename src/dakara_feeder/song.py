@@ -21,7 +21,8 @@ class BaseSong:
 
     - `get_title`;
     - `get_duration`;
-    - `get_has_instrumental`;
+    - `get_instrumental_file`;
+    - `get_instrumental_track`;
     - `get_version`;
     - `get_detail`;
     - `get_detail_video`;
@@ -151,20 +152,29 @@ class BaseSong:
         """
         return self.metadata.get_duration().total_seconds()
 
-    def get_has_instrumental(self):
-        """Get the flag if the song has an instrumental track.
+    def get_instrumental_file(self):
+        """Get the path to the instrumental file, if any.
 
         Returns:
-            bool: `True` either if there is an extra audio file siding with the
-            video file, or if the video file has more than 2 audio tracks.
+            str: Name of the extra audio file siding with the video
+            file. `None` otherwise.
         """
         if self.audio_path:
-            return True
+            return self.audio_path.name
 
+        return None
+
+    def get_instrumental_track(self):
+        """Get index of the instrumental track, if any.
+
+        Returns:
+            int: Index of the second audio track (i.e. 1) if the video file has more
+            than 2 audio tracks. `None` otherwise.
+        """
         if self.metadata.get_audio_tracks_count() >= 2:
-            return True
+            return 1
 
-        return False
+        return None
 
     def get_artists(self):
         """Get the list of artists.
@@ -317,7 +327,8 @@ class BaseSong:
             "filename": str(self.video_path.name),
             "directory": get_clean_directory(self.video_path.parent),
             "duration": self.get_duration(),
-            "has_instrumental": self.get_has_instrumental(),
+            "instrumental_file": self.get_instrumental_file(),
+            "instrumental_track": self.get_instrumental_track(),
             "version": self.get_version(),
             "detail": self.get_detail(),
             "detail_video": self.get_detail_video(),

@@ -1,10 +1,12 @@
 """List directoryes to extract song files."""
 
 import logging
+import mimetypes
 from itertools import groupby
 
 import filetype
 
+from dakara_feeder.media import is_audio, is_video
 from dakara_feeder.subtitle.parsing import is_subtitle
 
 logger = logging.getLogger(__name__)
@@ -54,21 +56,79 @@ def get_path_without_extension(path):
 
 
 def get_main_type(file):
-    """Get the first part of the MIME type of the given file.
+    """Get the type of a given file.
+
+    First try a manual detection on expected extensions, as this is required
+    for subtitles, and as some audio files can be mistaken for video files
+    (notably, `.mka` files). Then try an automatic detection based on the
+    extension of the file. If this fails, try an automatic detection based on
+    the magic numbers in the file.
+
+    Args:
+        file (pathlib.Path): Absolute path to the file to extract the type.
+
+    Returns
+        str: Type if it can be extracted, `None` otherwise.
+    """
+    # manual detection of video files
+    if is_video(file):
+        return "video"
+
+    # manual detection of audio files
+    if is_audio(file):
+        return "audio"
+
+    # manual detection of subtitle files
+    if is_subtitle(file):
+        return "subtitle"
+
+    # automatic detection using extension
+    mimetype = get_mimetype_by_extension(file)
+
+    # if it failed, automatic detection using magic number
+    if mimetype is None:
+        mimetype = get_mimetype_by_magic_number(file)
+
+    # abort if not found
+    if mimetype is None:
+        return None
+
+    # extract main type from MIME type
+    maintype, _ = mimetype.split("/")
+    return maintype
+
+
+def get_mimetype_by_magic_number(file):
+    """Return the MIME type of a file based on its magic number.
+
+    This strategy is more costly and should be used as a second option.
 
     Args:
         file (pathlib.Path): Absolute path to the file to extract the MIME type.
 
     Returns
-        str: Main type if the MIME type can be extracted, `None` otherwise.
+        str: MIME type. `None` if teh MIME type cannot be identified.
     """
-    kind = filetype.guess(str(file))
+    instance = filetype.guess(str(file))
 
-    if not kind:
-        return None
+    if instance:
+        return instance.mime
 
-    maintype, _ = kind.mime.split("/")
-    return maintype
+    return None
+
+
+def get_mimetype_by_extension(file):
+    """Return the MIME type of a file based on its extension.
+
+    Args:
+        file (pathlib.Path): Absolute path to the file to extract the MIME type.
+
+    Returns
+        str: MIME type. `None` if the MIME type cannot be identified.
+    """
+    # TODO Use `guess_type_file` from Python 3.13
+    mimetype, _ = mimetypes.guess_type(file, strict=False)
+    return mimetype
 
 
 def group_by_type(files, path):
@@ -97,7 +157,7 @@ def group_by_type(files, path):
             audios.append(file)
             continue
 
-        if is_subtitle(file):
+        if maintype == "subtitle":
             subtitles.append(file)
             continue
 
