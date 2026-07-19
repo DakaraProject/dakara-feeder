@@ -60,9 +60,9 @@ def get_main_type(file):
 
     First try a manual detection on expected extensions, as this is required
     for subtitles, and as some audio files can be mistaken for video files
-    (notably, `.mka` files for Python 3.11 and lower). Then try an automatic
-    detection based on the extension of the file. If this fails, try an
-    automatic detection based on the magic numbers in the file.
+    (notably, `.mka` files). Then try an automatic detection based on the
+    extension of the file. If this fails, try an automatic detection based on
+    the magic numbers in the file.
 
     Args:
         file (pathlib.Path): Absolute path to the file to extract the type.
