@@ -1,3 +1,4 @@
+---
 # Parameters for the server
 server:
   # Server address (host and port given at the same time)
