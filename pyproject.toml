@@ -21,23 +21,23 @@ classifiers = [
         "Intended Audience :: Developers",
 ]
 dependencies = [
-        "dakarabase>=2.2.0,<2.3.0",
+        "dakarabase>=2.3.0,<2.4.0",
         "filetype>=1.2.0,<1.3.0",
-        "packaging>=26.0,<27.0",
+        "packaging>=26.3,<27.0",
         "pymediainfo>=7.0.1,<7.1.0",
         "pysubs2>=1.8.1,<1.9.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-        "black>=26.3.1,<27.0.0",
+        "black>=26.5.1,<27.0.0",
         "codecov>=2.1.13,<2.2.0",
         "isort>=8.0.1,<8.1.0",
         "pdoc>=16.0.0,<16.1.0",
-        "pre-commit>=4.5.1,<4.6.0",
+        "pre-commit>=4.6.2,<4.7.0",
         "pytest-cov>=7.1.0,<7.2.0",
-        "pytest>=9.0.2,<9.1.0",
-        "ruff>=0.15.9,<0.16.0",
+        "pytest>=9.1.1,<9.2.0",
+        "ruff>=0.16.2,<0.17.0",
         "yamllint>=1.38.0,<1.39.0",
 ]
 # note: update the build-system section below
@@ -53,7 +53,7 @@ Changelog = "https://github.com/DakaraProject/dakara-feeder/blob/master/CHANGELO
 dakara-feeder = "dakara_feeder.__main__:main"
 
 [build-system]
-requires = ["setuptools>=82.0.1"]
+requires = ["setuptools>=84.0.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
