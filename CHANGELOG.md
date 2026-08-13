@@ -30,6 +30,8 @@
 
 ## Unreleased
 
+## 1.10.0 - 2026-08-13
+
 ### Changed
 
 - The metadata parser can now be specified with the configuration key `metadata_parser`. Accepted values are `ffprobe` (default), `mediainfo`, or `null` (for testing only).

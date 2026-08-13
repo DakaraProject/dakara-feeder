@@ -1,4 +1,4 @@
 """Version of the feeder."""
 
-__version__ = "1.10.0-dev"
-__date__ = "2025-03-06"
+__version__ = "1.10.0"
+__date__ = "2026-08-13"
