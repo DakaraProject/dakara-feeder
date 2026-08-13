@@ -33,7 +33,9 @@
 ### Changed
 
 - The metadata parser can now be specified with the configuration key `metadata_parser`. Accepted values are `ffprobe` (default), `mediainfo`, or `null` (for testing only).
-- Songs with instrumental version are specified either with the `instrumental_file` field, if there is an audio file of the same name in the same directory as the video file, or with the `instrumental_track` field, if the video file has a second audio track. Both fields are sent to the server, instead of the `has_instrumental` field (see removed sub-section).
+- Songs with an instrumental version have either a non-blank `instrumental_file` field or a non-blank `instrumental_track` field.
+  The `instramental_file` is used if there is an audio file of the same name in the same directory as the video file, it contains the name of such file, whereas the `instrumental_track` field is used if the video file has a second audio track, it contains the number of this track (always 2 for now).
+  Both fields are null by default and are always sent to the server, instead of the `has_instrumental` field (see removed sub-section).
 
 ### Removed
 
@@ -42,7 +44,7 @@
 
 ### Fixed
 
-- Matroshka files containing only an audio track and having the `.mka` extension are correctly detected as adio files.
+- Matroshka files containing only an audio track and having the `.mka` extension are correctly detected as audio files.
 
 ## 1.9.0 - 2025-03-06
 
